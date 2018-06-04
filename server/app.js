@@ -15,8 +15,6 @@ require('dotenv').config();
 
 const app = express();
 app.disable('x-powered-by');
-//mongodb://schoolms:schoolms@ds051630.mlab.com:51630/schoolms
-//mongodb://localhost/schoolMSdev
 
 mongoose.connect(process.env.db, err => {
   if (err) {
