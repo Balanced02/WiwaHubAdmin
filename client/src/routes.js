@@ -1,10 +1,11 @@
 import React from 'react';
 import Loadable from 'react-loadable'
+import ReactLoading from 'react-loading'
 
 import DefaultLayout from './containers/DefaultLayout';
 
 function Loading() {
-  return <div>Loading...</div>;
+  return <ReactLoading type='bubbles' color='#20a8d8' style={{flex:1}} />
 }
 
 const Breadcrumbs = Loadable({

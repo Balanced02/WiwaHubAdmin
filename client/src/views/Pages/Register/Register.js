@@ -1,8 +1,43 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
+
+import { startRegister } from '../../../actions/auth'
+
 import { Button, Card, CardBody, CardFooter, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 
 class Register extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      userDetails: {
+        username: '',
+        password: '',
+        passwordC: '',
+        email: '',
+        userType: 'admin',
+      }
+    }
+  }
+
+  submit(){
+    const { username, password, passwordC, email } = this.state.userDetails
+    startRegister(this.state.userDetails)
+  }
+
+  handleInputChange(e){
+    let { name, value } = e.target
+    this.setState({
+      ...this.state,
+      userDetails: {
+        ...this.state.userDetails,
+        [name] : value
+      }
+    })
+  }
+
   render() {
+    const { username, password, passwordC, email } = this.state.userDetails
     return (
       <div className="app flex-row align-items-center">
         <Container>
@@ -18,13 +53,13 @@ class Register extends Component {
                         <i className="icon-user"></i>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input type="text" placeholder="Username" />
+                    <Input type="text" placeholder="Username" name='username' onChange={(e) => this.handleInputChange(e)} value={username} />
                   </InputGroup>
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>@</InputGroupText>
                     </InputGroupAddon>
-                    <Input type="text" placeholder="Email" />
+                    <Input type="text" placeholder="Email" name='email' onChange={(e) => this.handleInputChange(e)} value={email} />
                   </InputGroup>
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">
@@ -32,7 +67,7 @@ class Register extends Component {
                         <i className="icon-lock"></i>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input type="password" placeholder="Password" />
+                    <Input type="password" placeholder="Password" name='password' onChange={(e) => this.handleInputChange(e)} value={password}/>
                   </InputGroup>
                   <InputGroup className="mb-4">
                     <InputGroupAddon addonType="prepend">
@@ -40,19 +75,12 @@ class Register extends Component {
                         <i className="icon-lock"></i>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input type="password" placeholder="Repeat password" />
+                    <Input type="password" placeholder="Repeat password" name='passwordC' onChange={(e) => this.handleInputChange(e)} value={passwordC} />
                   </InputGroup>
-                  <Button color="success" block>Create Account</Button>
+                  <Button color="success" block onClick={() => this.submit() } >Create Account</Button>
                 </CardBody>
                 <CardFooter className="p-4">
-                  <Row>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-facebook" block><span>facebook</span></Button>
-                    </Col>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-twitter" block><span>twitter</span></Button>
-                    </Col>
-                  </Row>
+                <Link to='/login'> <Button color="primary" block >Login</Button></Link>
                 </CardFooter>
               </Card>
             </Col>
