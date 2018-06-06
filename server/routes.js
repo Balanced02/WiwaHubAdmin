@@ -9,11 +9,11 @@ import multer from "multer";
 import cfg from "./controllers/config";
 import jwt from "jsonwebtoken";
 import PassportJWT from "passport-jwt";
-import Users from './models/Users'
+import Users from "./models/Users";
 
 import uuid from "uuid/v4";
 
-import { Register, Login, Logout, AuthMe } from './controllers/auth'
+import { Register, Login, Logout, AuthMe } from "./controllers/auth";
 
 const app = express();
 const router = Router();
@@ -55,11 +55,12 @@ router.use(express.static(path.join(__dirname, "../client/build")));
 router.use("/api", api);
 
 api.get("/me", AuthMe);
-api.post("/auth/register", Register)
+api.get("/auth/logout", Logout);
+api.post("/auth/register", Register);
 api.post("/auth/login", function(req, res, next) {
   passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err || !user) {
-      console.log(user)
+      console.log(user);
       return res.status(400).json({
         message: "Something is not right",
         user: user

@@ -8,26 +8,26 @@ import jwt from "jsonwebtoken";
 import PassportJWT from "passport-jwt";
 export const Register = (req, res) => {
   let user = JSON.parse(req.headers.user);
-    userRegister(req.body)
-      .then(user => {
-        return res.json({
-          message: "Registered Successfully",
-          user: { ...user }
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        return res.status(400).json({
-          message: err.message
-        });
+  userRegister(req.body)
+    .then(user => {
+      return res.json({
+        message: "Registered Successfully",
+        user: { ...user }
       });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(400).json({
+        message: err.message
+      });
+    });
 };
 
 const userRegister = (body, user) => {
   let type = body.userType;
   let newUser = new Users({
     ...body,
-    userType: type,
+    userType: type
   });
 
   return new Promise((resolve, reject) => {
@@ -45,7 +45,7 @@ const userRegister = (body, user) => {
 export const Login = (req, res) => {
   passport.authenticate("jwt", { session: false }, (err, user, info) => {
     if (err || !user) {
-      console.log(err)
+      console.log(err);
       return res.status(400).json({
         message: "Something is not right",
         user: user
@@ -65,7 +65,8 @@ export const Login = (req, res) => {
 // Get user data from client side
 export const AuthMe = (req, res) => {
   let user = JSON.parse(req.headers.user);
-  if (user) {
+  console.log(user);
+  if (user.username) {
     return res.json({
       authenticated: true,
       user: user

@@ -1,5 +1,5 @@
-import { history } from '../App'
-import { callApi } from '../utils'
+import { history } from "../App";
+import { callApi } from "../utils";
 import { startLoading, stopLoading, showError, showInfo } from "./feedback";
 
 export const LOGIN = "LOGIN";
@@ -13,14 +13,22 @@ export const login = user => {
 };
 
 export const logout = () => {
-  return {
-    type: LOGOUT
+  return dispatch => {
+    localStorage.clear();
+    history.push("/login");
+    callApi("/auth/logout")
+      .then(data => {
+        type: LOGOUT;
+      })
+      .catch(err => {
+        type: LOGOUT;
+      });
   };
 };
 
 export const startRegister = formData => {
   return dispatch => {
-    console.log('Starting register')
+    console.log("Starting register");
     dispatch(startLoading());
     callApi("/auth/register", formData, "POST")
       .then(data => {
@@ -30,9 +38,9 @@ export const startRegister = formData => {
         history.push("/login");
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
         dispatch(stopLoading());
-        dispatch(showError('Username or email already is use'));
+        dispatch(showError("Username or email already is use"));
       });
   };
 };
@@ -43,7 +51,7 @@ export const startLogin = formData => {
     callApi("/auth/login", formData, "POST")
       .then(data => {
         localStorage.setItem("jwt", data.token);
-        localStorage.setItem("eduTorchUser", JSON.stringify(data.user._doc));
+        localStorage.setItem("wiwaHub", JSON.stringify(data.user._doc));
         dispatch(stopLoading());
         dispatch(login(data.user));
         history.push("/dashboard");
