@@ -26,6 +26,11 @@ const usersSchema = new Schema({
     type: String,
     required: true,
     trim: true,
+  },
+  passport: {
+    type: String,
+    // required: true,
+    trim: true,
   }
 });
 

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import { startRegister } from '../../../actions/auth'
 
 import { Button, Card, CardBody, CardFooter, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { showError } from '../../../actions/feedback';
 
 class Register extends Component {
 
@@ -22,7 +24,12 @@ class Register extends Component {
 
   submit(){
     const { username, password, passwordC, email } = this.state.userDetails
-    startRegister(this.state.userDetails)
+    if (!username) return this.props.dispatch(showError('Username field is required'))
+    if (!email) return this.props.dispatch(showError('Email is required'))
+    if (!password) return this.props.dispatch(showError('Please provide a password'))
+    if (!passwordC) return this.props.dispatch(showError('Please confirm your password'))
+    if (password !== passwordC) return this.props.dispatch(showError('Passwords do not match'))
+    this.props.dispatch(startRegister(this.state.userDetails))
   }
 
   handleInputChange(e){
@@ -77,7 +84,7 @@ class Register extends Component {
                     </InputGroupAddon>
                     <Input type="password" placeholder="Repeat password" name='passwordC' onChange={(e) => this.handleInputChange(e)} value={passwordC} />
                   </InputGroup>
-                  <Button color="success" block onClick={() => this.submit() } >Create Account</Button>
+                  <Button color="success" block onClick={() => this.submit()} >Create Account</Button>
                 </CardBody>
                 <CardFooter className="p-4">
                 <Link to='/login'> <Button color="primary" block >Login</Button></Link>
@@ -91,4 +98,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default connect()(Register)

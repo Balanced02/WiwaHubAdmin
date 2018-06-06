@@ -19,7 +19,7 @@ import {
       case SHOW_ERROR:
         return {
           ...state,
-          infos: [{ info: action.error, id: action.id, color: "error" }]
+          infos: [{ info: action.error, id: action.id, color: "danger" }]
         };
   
       case CLEAR_ERROR:

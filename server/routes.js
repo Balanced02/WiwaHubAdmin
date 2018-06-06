@@ -9,8 +9,11 @@ import multer from "multer";
 import cfg from "./controllers/config";
 import jwt from "jsonwebtoken";
 import PassportJWT from "passport-jwt";
+import Users from './models/Users'
 
 import uuid from "uuid/v4";
+
+import { Register, Login, Logout, AuthMe } from './controllers/auth'
 
 const app = express();
 const router = Router();
@@ -25,25 +28,25 @@ var upload = multer({ dest: "./public/logos" });
 router.use(passport.initialize());
 
 const LocalStrategy = passportLocal.Strategy;
-// passport.use(new LocalStrategy(Users.authenticate()));
-// passport.use(
-//   new JWTStrategy(
-//     {
-//       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-//       secretOrKey: cfg.jwtSecret
-//     },
-//     function(jwtPayload, cb) {
-//       //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
-//       return Users.findOne(jwtPayload.id)
-//         .then(user => {
-//           return cb(null, user);
-//         })
-//         .catch(err => {
-//           return cb(err);
-//         });
-//     }
-//   )
-// );
+passport.use(new LocalStrategy(Users.authenticate()));
+passport.use(
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      secretOrKey: cfg.jwtSecret
+    },
+    function(jwtPayload, cb) {
+      //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
+      return Users.findOne(jwtPayload.id)
+        .then(user => {
+          return cb(null, user);
+        })
+        .catch(err => {
+          return cb(err);
+        });
+    }
+  )
+);
 
 router.use(express.static(path.join(__dirname, "../client/build")));
 
@@ -51,11 +54,12 @@ router.use(express.static(path.join(__dirname, "../client/build")));
 
 router.use("/api", api);
 
-// api.get("/me", AuthMe);
+api.get("/me", AuthMe);
+api.post("/auth/register", Register)
 api.post("/auth/login", function(req, res, next) {
   passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err || !user) {
-      console.log(user);
+      console.log(user)
       return res.status(400).json({
         message: "Something is not right",
         user: user

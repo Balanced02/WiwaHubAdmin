@@ -1,9 +1,11 @@
 import regeneratorRuntime from "regenerator-runtime";
+import passport from "passport";
 
 import Users from "../models/Users";
 import { resolve } from "path";
 import cfg from "./config";
-
+import jwt from "jsonwebtoken";
+import PassportJWT from "passport-jwt";
 export const Register = (req, res) => {
   let user = JSON.parse(req.headers.user);
     userRegister(req.body)
@@ -41,8 +43,9 @@ const userRegister = (body, user) => {
 };
 
 export const Login = (req, res) => {
-  passport.authenticate("local", { session: false }, (err, user, info) => {
+  passport.authenticate("jwt", { session: false }, (err, user, info) => {
     if (err || !user) {
+      console.log(err)
       return res.status(400).json({
         message: "Something is not right",
         user: user

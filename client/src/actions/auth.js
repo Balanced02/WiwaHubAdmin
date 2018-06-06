@@ -20,6 +20,7 @@ export const logout = () => {
 
 export const startRegister = formData => {
   return dispatch => {
+    console.log('Starting register')
     dispatch(startLoading());
     callApi("/auth/register", formData, "POST")
       .then(data => {
@@ -29,9 +30,9 @@ export const startRegister = formData => {
         history.push("/login");
       })
       .catch(err => {
+        console.log(err)
         dispatch(stopLoading());
-        dispatch(showError(err));
-        console.log(err);
+        dispatch(showError('Username or email already is use'));
       });
   };
 };

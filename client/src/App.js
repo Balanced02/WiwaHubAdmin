@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Router, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 // Styles
 // CoreUI Icons Set
@@ -12,19 +12,29 @@ import 'font-awesome/css/font-awesome.min.css';
 import 'simple-line-icons/css/simple-line-icons.css';
 // Import Main styles for this application
 import './scss/style.css'
+import Alert from './components/Alert'
+
+import { Provider } from 'react-redux'
+
 import { createHashHistory } from "history"
 // Containers
 import { DefaultLayout } from './containers';
 // Pages
 import { Login, Page404, Page500, Register } from './views/Pages';
 
+import configureStore from './store'
+const store = configureStore(() => {})
+
 // import { renderRoutes } from 'react-router-config';
 export const history = createHashHistory()
+
 
 class App extends Component {
   render() {
     return (
-      <Router history={history} >
+      <Provider store={store}>
+      <HashRouter history={history} >
+      <div>
         <Switch>
           <Route exact path="/login" name="Login Page" component={Login} />
           <Route exact path="/register" name="Register Page" component={Register} />
@@ -32,7 +42,10 @@ class App extends Component {
           <Route exact path="/500" name="Page 500" component={Page500} />
           <Route path="/" name="Home" component={DefaultLayout} />
         </Switch>
-      </Router>
+        <Alert/>
+        </div>
+      </HashRouter>
+      </Provider>
     );
   }
 }

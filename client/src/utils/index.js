@@ -1,5 +1,5 @@
 import "whatwg-fetch";
-import { jwtConfig } from "../config";
+import { jwtConfig } from '../config'
 import upload from "superagent";
 
 var token = localStorage.getItem("jwt") || "";

@@ -54,14 +54,6 @@ cloudinary.config({
   api_secret: process.env.api_secret,
 });
 
-app.post('/api/uploadExamImages', (req, res, next) => {
-  console.log(req.files.file);
-  let imageFile = req.files.file;
-  uploadFile(imageFile)
-    .then(result => res.json({ file: result }))
-    .catch(err => res.status(500).json({ error: err }));
-});
-
 const uploadFile = imageFile => {
   return new Promise((resolve, reject) => {
     const newFilename = uuid();
@@ -96,9 +88,9 @@ app.use((req, res, next) => {
 // Error handler
 app.use((err, req, res, next) => {
   // eslint-disable-line no-unused-vars
-  res.status(err.status || 500).render('error', {
-    error: err.status,
-    message: err.message,
+  res.status(err.status || 500).send({
+    error: 'Error 500',
+    message: 'Error getting requested url',
   });
 });
 
