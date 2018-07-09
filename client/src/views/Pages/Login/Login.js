@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { startLogin } from '../../../actions/auth'
-import { showError } from '../../../actions/feedback'
+import { showError, showInfo } from '../../../actions/feedback'
 
 import { Button, Card, CardBody, CardGroup, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 

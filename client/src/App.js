@@ -1,50 +1,54 @@
-import React, { Component } from 'react';
-import { HashRouter, Route, Switch } from 'react-router-dom';
-import './App.css';
+import React, { Component } from "react";
+import { HashRouter, Route, Switch } from "react-router-dom";
+import "./App.css";
 // Styles
 // CoreUI Icons Set
-import '@coreui/icons/css/coreui-icons.min.css';
+import "@coreui/icons/css/coreui-icons.min.css";
 // Import Flag Icons Set
-import 'flag-icon-css/css/flag-icon.min.css';
+import "flag-icon-css/css/flag-icon.min.css";
 // Import Font Awesome Icons Set
-import 'font-awesome/css/font-awesome.min.css';
+import "font-awesome/css/font-awesome.min.css";
 // Import Simple Line Icons Set
-import 'simple-line-icons/css/simple-line-icons.css';
+import "simple-line-icons/css/simple-line-icons.css";
 // Import Main styles for this application
-import './scss/style.css'
-import Alert from './components/Alert'
+import "./scss/style.css";
+import Alert from "./components/Alert";
 
-import { Provider } from 'react-redux'
+import { Provider } from "react-redux";
 
-import { createHashHistory } from "history"
+import { createHashHistory } from "history";
 // Containers
-import { DefaultLayout } from './containers';
+import { DefaultLayout } from "./containers";
 // Pages
-import { Login, Page404, Page500, Register } from './views/Pages';
+import { Login, Page404, Page500, Register } from "./views/Pages";
 
-import configureStore from './store'
-const store = configureStore(() => {})
+import configureStore from "./store";
+const store = configureStore(() => {});
 
 // import { renderRoutes } from 'react-router-config';
-export const history = createHashHistory()
-
+export const history = createHashHistory();
 
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
-      <HashRouter history={history} >
-      <div>
-        <Switch>
-          <Route exact path="/login" name="Login Page" component={Login} />
-          <Route exact path="/register" name="Register Page" component={Register} />
-          <Route exact path="/404" name="Page 404" component={Page404} />
-          <Route exact path="/500" name="Page 500" component={Page500} />
-          <Route path="/" name="Home" component={DefaultLayout} />
-        </Switch>
-        <Alert/>
+        <div>
+          <HashRouter history={history}>
+            <Switch>
+              <Route exact path="/login" name="Login Page" component={Login} />
+              <Route
+                exact
+                path="/register"
+                name="Register Page"
+                component={Register}
+              />
+              <Route exact path="/404" name="Page 404" component={Page404} />
+              <Route exact path="/500" name="Page 500" component={Page500} />
+              <Route path="/" name="Home" component={DefaultLayout} />
+            </Switch>
+          </HashRouter>
+          <Alert />
         </div>
-      </HashRouter>
       </Provider>
     );
   }

@@ -2,22 +2,23 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Alert } from 'reactstrap'
 
-import { clearError, clearInfo } from '../actions/feedback'
+import { clearInfo } from '../actions/feedback'
 
-const AlertComponent = ({ dispatch, errors, infos }) => {
+const AlertComponent = ({ dispatch, infos }) => {
   return (
     <div
       style={{
-        position: 'absolute',
+        position: 'fixed',
         top: '5px',
         right: '5px',
-        zIndex: 2,
+        zIndex: 99999999,
       }}
     >
       <div className="alertBox">
         {infos.reverse().map((info, i) =>
           <Alert color={info.color || 'success' } key={i} toggle={() => dispatch(clearInfo(info.id))}>
-            {info.info}
+          <h4 className="alert-heading">{info.color === 'success' ? 'Info 👌🏽' : info.color === 'warning' ? 'Warning' :  'Error!!!' }</h4>
+          <p>  {info.info} </p>
           </Alert>
         )}
       </div>

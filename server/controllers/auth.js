@@ -16,7 +16,6 @@ export const Register = (req, res) => {
       });
     })
     .catch(err => {
-      console.log(err);
       return res.status(400).json({
         message: err.message
       });
@@ -33,10 +32,8 @@ const userRegister = (body, user) => {
   return new Promise((resolve, reject) => {
     Users.register(newUser, body.password, (err, user) => {
       if (err) {
-        console.log(err);
         reject(err);
       }
-      console.log(user);
       resolve(user);
     });
   });
@@ -45,7 +42,6 @@ const userRegister = (body, user) => {
 export const Login = (req, res) => {
   passport.authenticate("jwt", { session: false }, (err, user, info) => {
     if (err || !user) {
-      console.log(err);
       return res.status(400).json({
         message: "Something is not right",
         user: user
@@ -65,7 +61,6 @@ export const Login = (req, res) => {
 // Get user data from client side
 export const AuthMe = (req, res) => {
   let user = JSON.parse(req.headers.user);
-  console.log(user);
   if (user.username) {
     return res.json({
       authenticated: true,

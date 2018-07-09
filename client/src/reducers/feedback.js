@@ -9,7 +9,6 @@ import {
   
   const init = {
     loading: false,
-    errors: [],
     infos: []
   };
   
