@@ -24,6 +24,7 @@ const productsSchema = new Schema({
   premium:{
     type: String,
     required: true,
+    default: false,
   },
   title: {
     type: String,

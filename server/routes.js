@@ -11,8 +11,6 @@ import jwt from "jsonwebtoken";
 import PassportJWT from "passport-jwt";
 import Users from "./models/Users";
 
-import uuid from "uuid/v4";
-
 import { Register, Login, Logout, AuthMe } from "./controllers/auth";
 
 const app = express();
