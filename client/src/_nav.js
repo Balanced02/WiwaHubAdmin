@@ -27,5 +27,10 @@ export default {
         text: 'NEW',
       },
     },
+    {
+      name: 'Add Product',
+      url: '/addProduct',
+      icon: 'icon-speedometer',
+    },
   ],
 };

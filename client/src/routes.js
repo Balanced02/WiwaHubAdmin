@@ -173,6 +173,11 @@ const Widgets = Loadable({
   loading: Loading,
 });
 
+const NewProduct = Loadable({
+  loader: () => import('./views/Base/NewProduct'),
+  loading: Loading
+})
+
 
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
@@ -215,6 +220,7 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', component: Modals },
   { path: '/widgets', name: 'Widgets', component: Widgets },
   { path: '/charts', name: 'Charts', component: Charts },
+  { path: '/addProduct', name: 'New Product', component: NewProduct },
 ];
 
 export default routes;

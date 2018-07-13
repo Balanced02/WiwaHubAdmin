@@ -17,10 +17,14 @@ const productsSchema = new Schema({
     type: String,
     required: true,
   }, 
-  location:{
+  state:{
     type: String,
     required: true,
   }, 
+  localGovtArea: {
+    type: String,
+    required: true,
+  },
   premium:{
     type: String,
     required: true,
