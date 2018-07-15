@@ -65,7 +65,7 @@ export const picUpload = async (file, folder) => {
   return new Promise(async (resolve, reject) => {
     let imageUrl = await imageUpload("/uploadFile", photo, "POST");
     if (imageUrl.file.hasOwnProperty("url")) {
-      resolve(imageUrl.file.url);
+      resolve({ url: imageUrl.file.url, fileName: imageUrl.file.original_filename });
     } else {
       reject(new Error("Unable to resolve url"));
     }
