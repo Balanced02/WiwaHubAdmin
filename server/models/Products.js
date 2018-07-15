@@ -17,10 +17,14 @@ const productsSchema = new Schema({
     type: String,
     required: true,
   }, 
-  location:{
+  state:{
     type: String,
     required: true,
   }, 
+  localGovtArea: {
+    type: String,
+    required: true,
+  },
   premium:{
     type: String,
     required: true,
@@ -34,6 +38,10 @@ const productsSchema = new Schema({
     type: Date,
     required: true,
     default: Date.now
+  },
+  picName: {
+    type: String,
+    required: true
   }
 });
 
