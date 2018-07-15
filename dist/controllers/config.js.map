@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../server/controllers/config.js"],"names":["module","exports","jwtSecret","jwtSession","session"],"mappings":";;AAAAA,OAAOC,OAAP,GAAiB;AACfC,aAAW,uBADI;AAEfC,cAAY;AACVC,aAAS;AADC;AAFG,CAAjB","file":"config.js","sourcesContent":["module.exports = {\n  jwtSecret: \"s3cr3twiwahubdizabled\",\n  jwtSession: {\n    session: false\n  }\n};\n"]}
