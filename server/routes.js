@@ -9,7 +9,7 @@ import PassportJWT from "passport-jwt";
 import Users from "./models/Users";
 
 import { Register, Logout, AuthMe } from "./controllers/auth";
-import { CreateProduct } from "./controllers/api";
+import { CreateProduct, GetProducts } from "./controllers/api";
 
 const app = express();
 const router = Router();
@@ -82,5 +82,6 @@ api.post("/auth/login", function(req, res, next) {
 });
 
 api.post('/createProduct', CreateProduct)
+api.get('/getProducts/:id', GetProducts)
 
 export default router;

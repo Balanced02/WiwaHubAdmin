@@ -42,7 +42,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://wiwahub.herokuapp.com/",
     credentials: true
   })
 );
@@ -65,6 +65,7 @@ const uploadFile = imageFile => {
       `${__dirname}/public/${newFilename}-${imageFile.name}`,
       function(err) {
         if (err) {
+          console.log(err)
           reject(err);
         }
         cloudinary.uploader.upload(
