@@ -81,7 +81,6 @@ class NewProduct extends Component {
     } else {
           picUpload(this.state.uploadFile, 'logos')
             .then(({url, fileName}) => {
-              this.props.dispatch(showInfo('Pic uploaded successfully'))
               this.setState({
                 imageUrl: url,
                 uploading: false,
