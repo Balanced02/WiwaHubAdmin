@@ -17,7 +17,7 @@ class Register extends Component {
         password: '',
         passwordC: '',
         email: '',
-        userType: 'admin',
+        userType: 'user',
       }
     }
   }
