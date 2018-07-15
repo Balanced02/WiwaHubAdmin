@@ -6,7 +6,7 @@ import { callApi } from "../../../utils/index";
 import { showError, showInfo } from "../../../actions/feedback";
 import Prompt from "../../../components/Prompt";
 
-class Cards extends Component {
+class ProductLists extends Component {
   constructor(props) {
     super(props);
     this.toggleFade = this.toggleFade.bind(this);
@@ -14,18 +14,7 @@ class Cards extends Component {
       collapse: true,
       fadeIn: true,
       timeout: 300,
-      productList: [
-        {
-          id: "0002",
-          username: "Balanced",
-          product:
-            "http://d1hxhfsggnhjjy.cloudfront.net/assets/products/bits/fan/fan-c84bde7170cff45ccf896a2b8609bc10ea4c49e1ed27dec250ce706d33cdf0f0.png",
-          location: "Karu",
-          premium: false,
-          phoneNo: "00000000",
-          title: "Fan"
-        }
-      ],
+      productList: [],
       selectedProduct: null,
       showDeletePrompt: false,
       showPremiumPrompt: false
@@ -97,6 +86,19 @@ class Cards extends Component {
     }));
   }
 
+  getProducts(id){
+    callApi(`/getProducts/${id}`).then(({products}) => {
+      this.setState({
+        ...this.state,
+        productList: products
+      })
+    })
+  }
+
+  componentWillMount(){
+    this.getProducts(1)
+  }
+
   render() {
     const deleteConfirmText = this.state.selectedProduct ? (
       <span>
@@ -117,10 +119,10 @@ class Cards extends Component {
     return (
       <div className="animated fadeIn">
         <Row>
-          {[0, 0, 0, 0, 0, 0, 0].map((product, i) => (
+          {this.state.productList.map((product, i) => (
             <ProductList
               key={i}
-              data={this.state.productList[0]}
+              data={product}
               deleteProduct={prod => this.toggleDeletePrompt(prod)}
               togglePremiumPrompt={prod => this.togglePremiumPrompt(prod)}
             />
@@ -147,4 +149,4 @@ class Cards extends Component {
   }
 }
 
-export default connect()(Cards);
+export default connect()(ProductLists);
