@@ -1,17 +1,15 @@
 import express, { Router } from "express";
 import path from "path";
-import moment from "moment";
 import passport from "passport";
 import passportLocal from "passport-local";
-import mongoose from "mongoose";
-import connectMongo from "connect-mongo";
 import multer from "multer";
 import cfg from "./controllers/config";
 import jwt from "jsonwebtoken";
 import PassportJWT from "passport-jwt";
 import Users from "./models/Users";
 
-import { Register, Login, Logout, AuthMe } from "./controllers/auth";
+import { Register, Logout, AuthMe } from "./controllers/auth";
+import { CreateProduct } from "./controllers/api";
 
 const app = express();
 const router = Router();
@@ -82,5 +80,7 @@ api.post("/auth/login", function(req, res, next) {
     });
   })(req, res);
 });
+
+api.post('/createProduct', CreateProduct)
 
 export default router;

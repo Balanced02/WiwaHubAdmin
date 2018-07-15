@@ -80,13 +80,14 @@ class NewProduct extends Component {
       return;
     } else {
           picUpload(this.state.uploadFile, 'logos')
-            .then(url => {
+            .then(({url, fileName}) => {
               this.setState({
                 imageUrl: url,
                 uploading: false,
                 inputs: {
                   ...this.state.inputs,
-                  passport: url,
+                  product: url,
+                  picName: fileName
                 },
               });
               this.createProduct();

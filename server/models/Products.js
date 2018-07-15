@@ -38,6 +38,10 @@ const productsSchema = new Schema({
     type: Date,
     required: true,
     default: Date.now
+  },
+  picName: {
+    type: String,
+    required: true
   }
 });
 
