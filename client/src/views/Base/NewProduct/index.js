@@ -144,7 +144,9 @@ class NewProduct extends Component {
       uploadFile: null,
       uploading: false,
       imageUrl: "",
-      inputs: {}
+      inputs: {
+        negotiable: true
+      }
     };
     this.setState({
       ...resetState

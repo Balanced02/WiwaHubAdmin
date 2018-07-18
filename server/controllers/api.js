@@ -28,13 +28,13 @@ export const ChangePremium = (req, res) => {
 };
 
 export const CreateProduct = (req, res, result) => {
-  const { url, original_filename } = result
+  const { url, public_id } = result
   const user = JSON.parse(req.headers.user);
   const {title, state, localGovtArea, price, negotiable} = JSON.parse(req.body.data)
   const productDetails = {
     title, state, localGovtArea, price, negotiable,
     product: url,
-    picName: original_filename
+    picName: public_id
   };
   Product.create({ ...productDetails, username: user.sid })
     .then(data => res.json(data))
@@ -111,3 +111,14 @@ export const GetProducts = async (req, res) => {
     });
   }
 };
+
+export const DeleteProduct = (req, res, result) => {
+  console.log(result)
+  let { sid } = req.body;
+  Products.findOneAndRemove({ sid }).catch(err => {
+    res.status(500).json({
+      message: "Unable to delete Product",
+      error: err.message
+    });
+  });
+}
