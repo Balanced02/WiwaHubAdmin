@@ -1,6 +1,7 @@
 import regeneratorRuntime from "regenerator-runtime"
 import Product from '../models/Products'
 import Users from '../models/Users'
+import Products from "../models/Products";
 
 export const ChangePremium = (req, res) => {
   let id = req.params.id;
@@ -76,4 +77,31 @@ export const GetProducts = async (req, res) => {
     })
   }
 
+}
+
+export const SearchProducts = async(req, res) => {
+  let search = {
+    $regex: req.params.id,
+    $options: 'i',
+  }
+  let results = await Products.find({
+    $or: [{
+        sid: search,
+      },
+      {
+        product: search,
+      },
+      {
+        state: search,
+      },
+      {
+        localGovtArea: search,
+      },
+      {
+        title: search,
+      },
+    ],
+  })
+  // console.log(results)
+  return res.json(results)
 }
