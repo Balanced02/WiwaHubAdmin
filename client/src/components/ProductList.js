@@ -14,10 +14,10 @@ export default ({ data, }) =>
     <Card className="card-accent-primary">
       <CardHeader>
         {data.username}
-        <span className="pull-right" ><strong> Tel:</strong> {data.phoneNumber} </span>
+        <div className="float-right" ><strong> Tel:</strong> {data.phoneNumber} </div>
       </CardHeader>
       <CardBody>
-      <CardImg top width="100%" src={data.product} alt={data.title} />
+      <CardImg top height="180px" src={data.product} alt={data.title} />
       </CardBody>
       <CardFooter> 
         <div>

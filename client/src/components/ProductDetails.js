@@ -8,7 +8,8 @@ export default ({
   handleInputChange,
   submit,
   handleNumberInputChange,
-  handleSwitchChange
+  handleSwitchChange,
+  fetching
 }) => (
   <Form>
     <FormGroup>
@@ -119,7 +120,7 @@ export default ({
         </FormGroup>
       </Col>
     </Row>
-    <Button onClick={() => submit()} className={"pull-right"}>
+    <Button onClick={() => submit()} className={"pull-right"} disabled={fetching} >
       Submit
     </Button>
   </Form>
