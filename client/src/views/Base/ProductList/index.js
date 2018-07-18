@@ -5,6 +5,7 @@ import ProductList from "../../../components/ProductList";
 import { callApi } from "../../../utils/index";
 import { showError, showInfo } from "../../../actions/feedback";
 import Prompt from "../../../components/Prompt";
+import Loading from '../../../components/loading'
 
 class ProductLists extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class ProductLists extends Component {
       searchKey: '',
       page: 1,
       count: 0,
+      fetching: true
     };
   }
 
@@ -95,7 +97,8 @@ class ProductLists extends Component {
       this.setState({
         ...this.state,
         productList: products,
-        count: count
+        count: count,
+        fetching: false
       })
     })
   }
@@ -145,14 +148,14 @@ class ProductLists extends Component {
       </CardHeader>
       <CardBlock>
         <Row>
-          { this.state.productList.length ? this.state.productList.map((product, i) => (
+          { this.state.productList.length && !this.state.fetching ? this.state.productList.map((product, i) => (
             <ProductList
               key={i}
               data={product}
               deleteProduct={prod => this.toggleDeletePrompt(prod)}
               togglePremiumPrompt={prod => this.togglePremiumPrompt(prod)}
             />
-          )) : 
+          )) : this.state.fetching ? <Loading /> :
           <CardBlock> Ooops, No Results Found... </CardBlock>
           }
         </Row>
