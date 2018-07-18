@@ -44,7 +44,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://192.168.0.101:3000",
     credentials: true
   })
 );
@@ -102,18 +102,21 @@ const deleteImage = public_id => {
 }
 
 app.post("/api/createProduct", (req, res) => {
+  const user = JSON.parse(req.headers.user);
+  console.log(user)
   let imageFile = req.files.file;
   uploadFile(imageFile)
     .then(result => CreateProduct(req, res, result))
     .catch(err => res.status(500).json({ error: err }));
 });
 
-app.post('/api/deleteImage', (req, res) => {
+app.post('/api/deleteProduct/:id', (req, res) => {
   let public_id = req.body.picName
   deleteImage(public_id)
     .then(result => DeleteProduct(req, res, result))
     .catch(err => res.status(500).json({error: err}) )
 })
+
 
 // Routes
 app.use("/", routes);

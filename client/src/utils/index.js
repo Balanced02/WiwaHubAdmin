@@ -33,45 +33,6 @@ export const callApi = (url, data, method) => {
   });
 };
 
-export const imageUpload = (url, data, method) => {
-  let photo = data;
-  console.log("Calling API... " + url);
-  return new Promise(function(resolve, reject) {
-    let options = {
-      method: "POST",
-      mode: "cors",
-      redirect: "follow",
-      credentials: "include"
-    };
-    if (method === "POST") {
-      options.body = photo;
-    }
-    fetch(`${jwtConfig.fetchUrl}api${url}`, options)
-      .then(res => {
-        if (res.ok) return res.json();
-        reject(new Error(res.statusText));
-      })
-      .then(data => resolve(data))
-      .catch(err => {
-        console.log(err);
-        reject(err);
-      });
-  });
-};
-
-export const picUpload = async (file, folder) => {
-  let photo = new FormData();
-  photo.append("file", file);
-  return new Promise(async (resolve, reject) => {
-    let imageUrl = await imageUpload("/uploadFile", photo, "POST");
-    if (imageUrl.file.hasOwnProperty("url")) {
-      resolve({ url: imageUrl.file.url, fileName: imageUrl.file.original_filename });
-    } else {
-      reject(new Error("Unable to resolve url"));
-    }
-  });
-};
-
 export const callApiWithFormData = (url, data, method, file) => {
   let photo = new FormData();
   photo.append("file", file);
@@ -87,6 +48,7 @@ export const callApiWithFormData = (url, data, method, file) => {
     };
     if (method === "POST") {
       options.body = photo;
+      options.headers.Accept = "application/json";
     }
     fetch(`${jwtConfig.fetchUrl}api${url}`, options)
       .then(res => {

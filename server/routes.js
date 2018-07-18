@@ -9,9 +9,8 @@ import PassportJWT from "passport-jwt";
 import Users from "./models/Users";
 
 import { Register, Logout, AuthMe } from "./controllers/auth";
-import { CreateProduct, GetProducts, SearchProducts } from "./controllers/api";
+import { GetProducts, ChangePremium, } from "./controllers/api";
 
-const app = express();
 const router = Router();
 const api = Router();
 
@@ -81,34 +80,7 @@ api.post("/auth/login", function(req, res, next) {
   })(req, res);
 });
 
-api.post("/uploadFile", (req, res, next) => {
-  let imageFile = req.files.file;
-  uploadFile(imageFile)
-    .then(result => res.json({ file: result }))
-    .catch(err => res.status(500).json({ error: err }));
-});
-api.post('/getProducts/:id', GetProducts)
-
-
-const uploadFile = imageFile => {
-  return new Promise((resolve, reject) => {
-    const newFilename = uuid();
-    imageFile.mv(
-      `${__dirname}/public/${newFilename}-${imageFile.name}`,
-      function(err) {
-        if (err) {
-          console.log(err)
-          reject(err);
-        }
-        cloudinary.uploader.upload(
-          `${__dirname}/public/${newFilename}-${imageFile.name}`,
-          result => {
-            resolve(result);
-          }
-        );
-      }
-    );
-  });
-};
+api.post('/getProducts/:id', GetProducts);
+api.post('/changePremium', ChangePremium);
 
 export default router;

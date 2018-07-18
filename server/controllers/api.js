@@ -4,15 +4,15 @@ import Users from "../models/Users";
 import Products from "../models/Products";
 
 export const ChangePremium = (req, res) => {
-  let id = req.params.id;
-  let { premium } = req.body;
+  let id = req.body._id;
+  let premium  = req.body;
   Products.findOneAndUpdate(
     {
       _id: id
     },
     {
       $set: {
-        premium
+        premium: !premium.premium
       }
     },
     {
@@ -30,6 +30,7 @@ export const ChangePremium = (req, res) => {
 export const CreateProduct = (req, res, result) => {
   const { url, public_id } = result
   const user = JSON.parse(req.headers.user);
+  console.log(user)
   const {title, state, localGovtArea, price, negotiable} = JSON.parse(req.body.data)
   const productDetails = {
     title, state, localGovtArea, price, negotiable,
@@ -114,8 +115,10 @@ export const GetProducts = async (req, res) => {
 
 export const DeleteProduct = (req, res, result) => {
   console.log(result)
-  let { sid } = req.body;
-  Products.findOneAndRemove({ sid }).catch(err => {
+  let _id = req.params.id;
+  Products.findOneAndRemove({ _id }).then(data => res.json({
+    message: 'Deleted Successfully'
+  })).catch(err => {
     res.status(500).json({
       message: "Unable to delete Product",
       error: err.message
