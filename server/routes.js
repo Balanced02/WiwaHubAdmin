@@ -82,7 +82,6 @@ api.post("/auth/login", function(req, res, next) {
 });
 
 api.post('/createProduct', CreateProduct)
-api.get('/getProducts/:id', GetProducts)
-api.get('/searchProducts/:id', SearchProducts)
+api.post('/getProducts/:id', GetProducts)
 
 export default router;

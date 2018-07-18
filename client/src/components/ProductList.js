@@ -7,7 +7,6 @@ import {
   Col,
   CardImg
 } from "reactstrap";
-import { AppSwitch } from "@coreui/react";
 import moment from 'moment'
 
 export default ({ data, }) => 
@@ -22,7 +21,10 @@ export default ({ data, }) =>
       </CardBody>
       <CardFooter> 
         <div>
-        <strong> Description: </strong> {data.description}
+        <strong> Title: </strong> {data.title}
+        </div>
+        <div>
+        <strong> Price: </strong> {data.price} { data.negotiable ? "(Negotiable)" : "(Fixed)" }
         </div>
       <div><strong> Date Posted: </strong> {moment(data.created).calendar()} </div>
       <div><strong> State: </strong> {data.state}

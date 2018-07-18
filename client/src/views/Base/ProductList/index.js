@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row } from "reactstrap";
+import { Row, Input, InputGroup, InputGroupAddon, Card, CardHeader, CardBlock } from "reactstrap";
 import { connect } from "react-redux";
 import ProductList from "../../../components/ProductList";
 import { callApi } from "../../../utils/index";
@@ -15,9 +15,12 @@ class ProductLists extends Component {
       fadeIn: true,
       timeout: 300,
       productList: [],
+      filteredProducts: [],
       selectedProduct: null,
       showDeletePrompt: false,
-      showPremiumPrompt: false
+      showPremiumPrompt: false,
+      searchKey: '',
+      page: 1,
     };
   }
 
@@ -86,13 +89,27 @@ class ProductLists extends Component {
     }));
   }
 
-  getProducts(id){
-    callApi(`/getProducts/${id}`).then(({products}) => {
+  getProducts(id, searchKey = ''){
+    callApi(`/getProducts/${id}`, {searchKey: searchKey}, 'POST').then(({products, count}) => {
       this.setState({
         ...this.state,
-        productList: products
+        productList: products,
+        count: count
       })
     })
+  }
+
+  handleSearchChange(e){
+    const {value} = e.target
+    this.setState({
+      ...this.state,
+      searchKey: value
+    })
+    this.getProducts(1, value)
+  }
+
+  loadMoreProducts(){
+    this.getProducts(this.state.page + 1, this.state.searchKey)
   }
 
   componentWillMount(){
@@ -118,6 +135,14 @@ class ProductLists extends Component {
     );
     return (
       <div className="animated fadeIn">
+        <Card>
+          <CardHeader>
+        <InputGroup>
+        <Input placeholder="Search Products" onChange={e => this.handleSearchChange(e)}  />
+        <InputGroupAddon addonType="append">Search</InputGroupAddon>
+      </InputGroup>
+      </CardHeader>
+      <CardBlock>
         <Row>
           {this.state.productList.map((product, i) => (
             <ProductList
@@ -144,6 +169,8 @@ class ProductLists extends Component {
           confirmText={premiumConfirmText}
           title="Change Premium Content"
         />
+        </CardBlock>
+      </Card>
       </div>
     );
   }

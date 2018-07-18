@@ -1,6 +1,6 @@
-import regeneratorRuntime from "regenerator-runtime"
-import Product from '../models/Products'
-import Users from '../models/Users'
+import regeneratorRuntime from "regenerator-runtime";
+import Product from "../models/Products";
+import Users from "../models/Users";
 import Products from "../models/Products";
 
 export const ChangePremium = (req, res) => {
@@ -28,80 +28,81 @@ export const ChangePremium = (req, res) => {
 };
 
 export const CreateProduct = (req, res) => {
-  let user = JSON.parse(req.headers.user)
-  let productDetails = req.body
-  Product.create({...productDetails, username: user.sid})
+  let user = JSON.parse(req.headers.user);
+  let productDetails = req.body;
+  Product.create({ ...productDetails, username: user.sid })
     .then(data => res.json(data))
     .catch(err => {
-      console.log(err)
-      res.status(500).json({ err: err, message: err.message })})
-}
+      console.log(err);
+      res.status(500).json({ err: err, message: err.message });
+    });
+};
 
 export const GetProducts = async (req, res) => {
-  let page = parseInt(Number(req.params.id)) 
+  let page = parseInt(Number(req.params.id));
+  let searchKey = req.body.searchKey
+  let searchQuery = {}
+  if (searchKey) {
+    let search = {
+      $regex: searchKey || '',
+      $options: 'i',
+    }
+    searchQuery = {
+      $or: [
+        {
+          sid: search
+        },
+        {
+          product: search
+        },
+        {
+          state: search
+        },
+        {
+          localGovtArea: search
+        },
+        {
+          title: search
+        }
+      ]
+    };
+  }
   if (!page) {
-    page = 1
+    page = 1;
   }
   try {
     let [count, products] = await Promise.all([
-      Product.find().count(),
-      Product.find()
-      .sort('name')
-      .skip(page * 25 - 25)
-      .limit(25),
-    ])
-    let username = await Users.find({
-      sid: {
-        $in: products.map(product => product.username)
-      }
-    },
-    'username phoneNumber sid'
-  )
-  products = products.map(product => {
-    let userName = username.filter(user => user.sid === product.username)[0]
-    console.log(userName)
-    product._doc.username = userName ? userName.username : ''
-    product._doc.phoneNumber = userName ? userName.phoneNumber : ''
-    return product
-  })
+      Product.find(searchQuery).count(),
+      Product.find(searchQuery)
+        .sort("created")
+        .skip(page * 25 - 25)
+        .limit(25)
+    ]);
+    let username = await Users.find(
+      {
+        sid: {
+          $in: products.map(product => product.username)
+        }
+      },
+      "username phoneNumber sid"
+    );
+    products = products.map(product => {
+      let userName = username.filter(user => user.sid === product.username)[0];
+      console.log(userName);
+      product._doc.username = userName ? userName.username : "";
+      product._doc.phoneNumber = userName ? userName.phoneNumber : "";
+      return product;
+    });
 
     return res.json({
       count,
-      products,
-    })
+      products
+    });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).json({
-      message: 'Error Loading Product List',
-      error: err.message,
-    })
+      message: "Error Loading Product List",
+      error: err.message
+    });
   }
-
-}
-
-export const SearchProducts = async(req, res) => {
-  let search = {
-    $regex: req.params.id,
-    $options: 'i',
-  }
-  let results = await Products.find({
-    $or: [{
-        sid: search,
-      },
-      {
-        product: search,
-      },
-      {
-        state: search,
-      },
-      {
-        localGovtArea: search,
-      },
-      {
-        title: search,
-      },
-    ],
-  })
-  // console.log(results)
-  return res.json(results)
-}
+};

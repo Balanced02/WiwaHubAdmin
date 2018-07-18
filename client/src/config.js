@@ -1,4 +1,4 @@
 export const jwtConfig = {
-    fetchUrl: "https://wiwahub.herokuapp.com/",
+    fetchUrl: "http://localhost:1337/",
     secretKey: "secretKey"
   };

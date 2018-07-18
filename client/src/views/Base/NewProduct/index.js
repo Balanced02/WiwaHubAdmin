@@ -18,7 +18,7 @@ class NewProduct extends Component {
       uploadFile: null,
       uploading: false,
       imageUrl: '',
-      inputs: {}
+      inputs: { negotiable: true }
     };
   }
 
@@ -68,6 +68,30 @@ class NewProduct extends Component {
       ...this.state,
       inputs: {
         ...expectedInputs
+      }
+    })
+  }
+
+  handleNumberInputChange = (event) => {
+    event.preventDefault();
+    const { value } = event.target;
+    if (value.match(/^\d+$/) || value === '') {
+      this.setState({
+        ...this.state,
+        inputs: {
+          ...this.state.inputs,
+          price: value
+        }
+      })
+    }
+  }
+
+  handleSwitchChange = (type) => {
+    this.setState({
+      ...this.state,
+      inputs: {
+        ...this.state.inputs,
+        negotiable: type === 'negotiable'
       }
     })
   }
@@ -138,7 +162,7 @@ class NewProduct extends Component {
             <AddProduct submit ={() => this.submit()} uploading={uploading} image={imageUrl} changeImage={() => this.changeImage()} onImageDrop = {file => this.onImageDrop(file)} />
             </Col>
             <Col>
-            <ProductDetails data={inputs} handleInputChange={e => this.handleInputChange(e)} submit={() => this.submit()} />
+            <ProductDetails data={inputs} handleInputChange={e => this.handleInputChange(e)} submit={() => this.submit()} handleNumberInputChange={e => this.handleNumberInputChange(e)} handleSwitchChange={e => this.handleSwitchChange(e)} />
             </Col>
           </Row>
           </CardBody>
