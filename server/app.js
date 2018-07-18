@@ -1,5 +1,6 @@
 import express from "express";
 import path, { resolve } from "path";
+import fs from 'fs'
 import logger from "morgan";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
@@ -10,6 +11,7 @@ import cors from "cors";
 import fileUpload from "express-fileupload";
 import uuid from "uuid/v4";
 import cloudinary from "cloudinary";
+import { CreateProduct } from "./controllers/api";
 
 require("dotenv").config();
 
@@ -59,6 +61,18 @@ cloudinary.config({
 });
 
 const uploadFile = imageFile => {
+  fs.readdir(path.join(__dirname, "public"), (err, files) => {
+    if (err) {
+      console.log(err)
+    };
+    for (const file of files) {
+      fs.unlink(path.join(path.join(__dirname, 'public'), file), err => {
+        if (err) {
+          console.log(err)
+        }
+      });
+    }
+  });
   return new Promise((resolve, reject) => {
     const newFilename = uuid();
     imageFile.mv(
@@ -79,10 +93,10 @@ const uploadFile = imageFile => {
   });
 };
 
-app.post("/api/uploadFile", (req, res, next) => {
+app.post("/api/createProduct", (req, res, next) => {
   let imageFile = req.files.file;
   uploadFile(imageFile)
-    .then(result => res.json({ file: result }))
+    .then(result => CreateProduct(req, res, result))
     .catch(err => res.status(500).json({ error: err }));
 });
 

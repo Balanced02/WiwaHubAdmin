@@ -27,9 +27,15 @@ export const ChangePremium = (req, res) => {
     );
 };
 
-export const CreateProduct = (req, res) => {
-  let user = JSON.parse(req.headers.user);
-  let productDetails = req.body;
+export const CreateProduct = (req, res, result) => {
+  const { url, original_filename } = result
+  const user = JSON.parse(req.headers.user);
+  const {title, state, localGovtArea, price, negotiable} = JSON.parse(req.body.data)
+  const productDetails = {
+    title, state, localGovtArea, price, negotiable,
+    product: url,
+    picName: original_filename
+  };
   Product.create({ ...productDetails, username: user.sid })
     .then(data => res.json(data))
     .catch(err => {
@@ -88,7 +94,6 @@ export const GetProducts = async (req, res) => {
     );
     products = products.map(product => {
       let userName = username.filter(user => user.sid === product.username)[0];
-      console.log(userName);
       product._doc.username = userName ? userName.username : "";
       product._doc.phoneNumber = userName ? userName.phoneNumber : "";
       return product;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Input, InputGroup, InputGroupAddon, Card, CardHeader, CardBlock } from "reactstrap";
+import { Row, Input, InputGroup, InputGroupAddon, Card, CardHeader, CardBlock, CardFooter } from "reactstrap";
 import { connect } from "react-redux";
 import ProductList from "../../../components/ProductList";
 import { callApi } from "../../../utils/index";
@@ -21,6 +21,7 @@ class ProductLists extends Component {
       showPremiumPrompt: false,
       searchKey: '',
       page: 1,
+      count: 0,
     };
   }
 
@@ -144,14 +145,16 @@ class ProductLists extends Component {
       </CardHeader>
       <CardBlock>
         <Row>
-          {this.state.productList.map((product, i) => (
+          { this.state.productList.length ? this.state.productList.map((product, i) => (
             <ProductList
               key={i}
               data={product}
               deleteProduct={prod => this.toggleDeletePrompt(prod)}
               togglePremiumPrompt={prod => this.togglePremiumPrompt(prod)}
             />
-          ))}
+          )) : 
+          <CardBlock> Ooops, No Results Found... </CardBlock>
+          }
         </Row>
         <Prompt
           show={this.state.showDeletePrompt}
@@ -170,6 +173,9 @@ class ProductLists extends Component {
           title="Change Premium Content"
         />
         </CardBlock>
+          <CardFooter>
+            Showing {this.state.productList.length} of {this.state.count} 
+          </CardFooter>
       </Card>
       </div>
     );
