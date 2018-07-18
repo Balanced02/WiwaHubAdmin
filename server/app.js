@@ -11,7 +11,7 @@ import cors from "cors";
 import fileUpload from "express-fileupload";
 import uuid from "uuid/v4";
 import cloudinary from "cloudinary";
-import { CreateProduct } from "./controllers/api";
+import { CreateProduct, DeleteProduct } from "./controllers/api";
 
 require("dotenv").config();
 
@@ -93,12 +93,27 @@ const uploadFile = imageFile => {
   });
 };
 
-app.post("/api/createProduct", (req, res, next) => {
+const deleteImage = public_id => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(public_id, (err, result) => {
+      resolve(result)
+    })
+  })
+}
+
+app.post("/api/createProduct", (req, res) => {
   let imageFile = req.files.file;
   uploadFile(imageFile)
     .then(result => CreateProduct(req, res, result))
     .catch(err => res.status(500).json({ error: err }));
 });
+
+app.post('/api/deleteImage', (req, res) => {
+  let public_id = req.body.picName
+  deleteImage(public_id)
+    .then(result => DeleteProduct(req, res, result))
+    .catch(err => res.status(500).json({error: err}) )
+})
 
 // Routes
 app.use("/", routes);
