@@ -34,7 +34,7 @@ const productsSchema = new Schema({
     required: true,
   },
   premium: {
-    type: String,
+    type: Boolean,
     required: true,
     default: false,
   },

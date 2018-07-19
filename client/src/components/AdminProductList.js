@@ -9,12 +9,12 @@ import {
 } from "reactstrap";
 import moment from 'moment'
 
-export default ({ data, }) => 
+export default ({ data, toggleDeletePrompt, togglePremiumPrompt }) => 
   <Col xs="12" sm="6" md="4">
     <Card className="card-accent-primary">
       <CardHeader>
         {data.title}
-        <div className="float-right" ><strong> Tel:</strong> {data.phoneNumber} </div>
+        <span className='float-right' >Premium <input type='checkbox' checked={data.premium} onChange={()=> togglePremiumPrompt(data)} /> </span>
       </CardHeader>
       <CardBody>
       <CardImg top height="180px" src={data.product} alt={data.title} />
@@ -30,7 +30,7 @@ export default ({ data, }) =>
       <div><strong> State: </strong> {data.state}
       <div>
       <strong> LGA: </strong> {data.localGovtArea}
-      </div>
+      </div> <span className='float-right'> <i className="fa fa-trash fa-1.4x" style={{ cursor: 'pointer', color: 'red' }} onClick={()=> toggleDeletePrompt(data)} /> </span>
       </div>
       </CardFooter>
     </Card>
