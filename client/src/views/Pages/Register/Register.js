@@ -17,15 +17,17 @@ class Register extends Component {
         password: '',
         passwordC: '',
         email: '',
+        phoneNumber: '',
         userType: 'user',
       }
     }
   }
 
   submit(){
-    const { username, password, passwordC, email } = this.state.userDetails
+    const { username, password, passwordC, email, phoneNumber } = this.state.userDetails
     if (!username) return this.props.dispatch(showError('Username field is required'))
     if (!email) return this.props.dispatch(showError('Email is required'))
+    if (!phoneNumber) return this.props.dispatch(showError('Phone Number is required'))
     if (!password) return this.props.dispatch(showError('Please provide a password'))
     if (!passwordC) return this.props.dispatch(showError('Please confirm your password'))
     if (password !== passwordC) return this.props.dispatch(showError('Passwords do not match'))
@@ -43,8 +45,22 @@ class Register extends Component {
     })
   }
 
+  handleNumberInputChange = event => {
+    event.preventDefault();
+    const { value } = event.target;
+    if (value.match(/^\d+$/) || value === "") {
+      this.setState({
+        ...this.state,
+        userDetails: {
+          ...this.state.userDetails,
+          phoneNumber: value
+        }
+      });
+    }
+  };
+
   render() {
-    const { username, password, passwordC, email } = this.state.userDetails
+    const { username, password, passwordC, email, phoneNumber } = this.state.userDetails
     return (
       <div className="app flex-row align-items-center">
         <Container>
@@ -67,6 +83,14 @@ class Register extends Component {
                       <InputGroupText>@</InputGroupText>
                     </InputGroupAddon>
                     <Input type="text" placeholder="Email" name='email' onChange={(e) => this.handleInputChange(e)} value={email} />
+                  </InputGroup>
+                  <InputGroup className="mb-3">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="icon-phone"></i>
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input type="text" placeholder="Phone Number" name='phoneNumber' onChange={(e) => this.handleNumberInputChange(e)} value={phoneNumber} />
                   </InputGroup>
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">

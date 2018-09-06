@@ -18,7 +18,7 @@ class NewProduct extends Component {
       uploadFile: null,
       uploading: false,
       imageUrl: "",
-      inputs: { negotiable: true },
+      inputs: { negotiable: true, price: '', title: '', state: '', localGovtArea: '', },
       fetching: false
     };
   }
@@ -145,7 +145,7 @@ class NewProduct extends Component {
       uploading: false,
       imageUrl: "",
       inputs: {
-        negotiable: true
+        negotiable: true, price: '', title: '', state: '', localGovtArea: '',
       }
     };
     this.setState({
