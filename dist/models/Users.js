@@ -37,16 +37,12 @@ var usersSchema = new Schema({
     type: String,
     lowercase: true,
     trim: true,
-    required: true
+    required: true,
+    default: 'user'
   },
   email: {
     type: String,
     required: true,
-    trim: true
-  },
-  passport: {
-    type: String,
-    // required: true,
     trim: true
   },
   phoneNumber: {
