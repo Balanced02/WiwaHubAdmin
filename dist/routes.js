@@ -48,7 +48,6 @@ var _api = require("./controllers/api");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var app = (0, _express2.default)();
 var router = (0, _express.Router)();
 var api = (0, _express.Router)();
 
@@ -110,8 +109,8 @@ api.post("/auth/login", function (req, res, next) {
   })(req, res);
 });
 
-api.post('/createProduct', _api.CreateProduct);
-api.get('/getProducts/:id', _api.GetProducts);
+api.post('/getProducts/:id', _api.GetProducts);
+api.post('/changePremium', _api.ChangePremium);
 
 exports.default = router;
 //# sourceMappingURL=routes.js.map

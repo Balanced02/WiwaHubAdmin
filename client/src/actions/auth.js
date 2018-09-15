@@ -18,6 +18,7 @@ export const logout = () => {
     history.push("/login");
     callApi("/auth/logout")
       .then(data => {
+        window.location.reload()
         type: LOGOUT;
       })
       .catch(err => {
@@ -36,6 +37,7 @@ export const startRegister = formData => {
         dispatch(showInfo("Registration Successful! Please go to Login"));
         console.log(data);
         history.push("/login");
+        window.location.reload()
       })
       .catch(err => {
         console.log(err);

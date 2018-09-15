@@ -38,8 +38,16 @@ var productsSchema = new Schema({
     type: String,
     required: true
   },
-  premium: {
+  price: {
     type: String,
+    required: true
+  },
+  negotiable: {
+    type: Boolean,
+    required: true
+  },
+  premium: {
+    type: Boolean,
     required: true,
     default: false
   },
