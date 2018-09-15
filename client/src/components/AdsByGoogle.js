@@ -19,7 +19,6 @@ export default class HomePage extends React.Component {
       <ins className='adsbygoogle'
            style={{ display: 'block' }}
            data-ad-client='ca-pub-2302305146819783'
-           data-ad-slot='12121212'
            data-ad-format='auto' />
     );
   }

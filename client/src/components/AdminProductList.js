@@ -8,8 +8,9 @@ import {
   CardImg
 } from "reactstrap";
 import moment from 'moment'
+import AdsByGoogle from './AdsByGoogle'
 
-export default ({ data, toggleDeletePrompt, togglePremiumPrompt }) => 
+export default ({ data, toggleDeletePrompt, togglePremiumPrompt, key }) => 
   <Col xs="12" sm="6" md="4">
     <Card className="card-accent-primary">
       <CardHeader>
@@ -34,5 +35,6 @@ export default ({ data, toggleDeletePrompt, togglePremiumPrompt }) =>
       </div>
       </CardFooter>
     </Card>
+    {key % 10 === 0 ? <AdsByGoogle /> : '' }
   </Col>;
 
