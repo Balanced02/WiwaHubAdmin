@@ -10,7 +10,6 @@
     "backend": "nodemon server/index.js --exec babel-node",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run clean && mkdir -p dist && babel server -s -D -d dist",
-    "prestart": "cd client && npm install",
     "start": "concurrently \"node dist/index.js\" \"cd client && npm run dev\"",
     "clean": "rimraf dist",
     "dev": "concurrently \"nodemon server/index.js --exec babel-node\" \"cd client && npm run dev\""
