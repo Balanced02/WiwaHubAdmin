@@ -82,8 +82,7 @@ export const GetProducts = async (req, res) => {
       Product.find(searchQuery).count(),
       Product.find(searchQuery)
         .sort("created")
-        .skip(page * 25 - 25)
-        .limit(25)
+        .limit(page * 25)
     ]);
     let username = await Users.find(
       {

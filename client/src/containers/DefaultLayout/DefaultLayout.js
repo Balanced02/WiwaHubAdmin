@@ -46,7 +46,7 @@ class DefaultLayout extends Component {
             });
           } else {
             this.setState({
-              redirect: true
+              ready: true,
             });
           }
         })
@@ -62,7 +62,7 @@ class DefaultLayout extends Component {
     }
   }
   render() {
-    return this.state.ready ? (
+    return this.state.ready && !this.state.redirect ? (
       <div className="app">
         <AppHeader fixed>
           <DefaultHeader />

@@ -1,12 +1,22 @@
 import React, { Component } from "react";
-import { Row, Input, InputGroup, InputGroupAddon, Card, CardHeader, CardBlock, CardFooter } from "reactstrap";
+import {
+  Row,
+  Input,
+  InputGroup,
+  Button,
+  InputGroupAddon,
+  Card,
+  CardHeader,
+  CardBlock,
+  CardFooter
+} from "reactstrap";
 import { connect } from "react-redux";
 import ProductList from "../../../components/ProductList";
-import AdminProductList from '../../../components/AdminProductList'
+import AdminProductList from "../../../components/AdminProductList";
 import { callApi } from "../../../utils/index";
 import { showError, showInfo } from "../../../actions/feedback";
 import Prompt from "../../../components/Prompt";
-import Loading from '../../../components/loading'
+import Loading from "../../../components/loading";
 
 class ProductLists extends Component {
   constructor(props) {
@@ -21,12 +31,16 @@ class ProductLists extends Component {
       selectedProduct: null,
       showDeletePrompt: false,
       showPremiumPrompt: false,
-      searchKey: '',
+      searchKey: "",
       page: 1,
       count: 0,
       fetching: true,
       isFetching: false,
-      user: this.props.user ? this.props.user.userType ? this.props.user.userType : this.props.user._doc.userType : ''
+      user: this.props.user
+        ? this.props.user.userType
+          ? this.props.user.userType
+          : this.props.user._doc.userType
+        : ""
     };
   }
 
@@ -37,7 +51,7 @@ class ProductLists extends Component {
   }
 
   deleteProduct() {
-    console.log(this.state.selectedProduct)
+    console.log(this.state.selectedProduct);
     const id = this.state.selectedProduct._id;
     if (!id) {
       this.toggleDeletePrompt();
@@ -45,18 +59,18 @@ class ProductLists extends Component {
     }
     this.setState({
       ...this.state,
-      isFetching: true,
-    })
-    callApi(`/deleteProduct/${id}`, this.state.selectedProduct, 'POST')
+      isFetching: true
+    });
+    callApi(`/deleteProduct/${id}`, this.state.selectedProduct, "POST")
       .then(() => {
-        this.clearIsFetching()
+        this.clearIsFetching();
         this.props.dispatch(showInfo("Successfully Deleted"));
         this.getProducts();
         this.toggleDeletePrompt();
         this.clearSelectedState();
       })
       .catch(() => {
-        this.clearIsFetching()
+        this.clearIsFetching();
         this.props.dispatch(showError("Error deleting, pls refresh the page"));
         this.toggleDeletePrompt();
         this.clearSelectedState();
@@ -78,27 +92,27 @@ class ProductLists extends Component {
     }
     this.setState({
       ...this.state,
-      isFetching: true,
-    })
+      isFetching: true
+    });
     callApi("/changePremium", product, "POST")
       .then(() => {
         this.props.dispatch(showInfo("Successfully Changed"));
         this.togglePremiumPrompt();
-        this.clearIsFetching()
-        this.getProducts(this.state.page)
+        this.clearIsFetching();
+        this.getProducts(this.state.page);
       })
       .catch(() => {
-        this.clearIsFetching()
+        this.clearIsFetching();
         this.props.dispatch(showError("Error changing Premium status"));
         this.togglePremiumPrompt();
       });
   }
 
-  clearIsFetching(){
+  clearIsFetching() {
     this.setState({
       ...this.state,
       isFetching: false
-    })
+    });
   }
 
   togglePremiumPrompt(product = {}) {
@@ -117,32 +131,34 @@ class ProductLists extends Component {
     }));
   }
 
-  getProducts(id, searchKey = ''){
-    callApi(`/getProducts/${id}`, {searchKey: searchKey}, 'POST').then(({products, count}) => {
-      this.setState({
-        ...this.state,
-        productList: products,
-        count: count,
-        fetching: false
-      })
-    })
+  getProducts(id, searchKey = "") {
+    callApi(`/getProducts/${id}`, { searchKey: searchKey }, "POST").then(
+      ({ products, count }) => {
+        this.setState({
+          ...this.state,
+          productList: this.state.productList.concat(products),
+          count: count,
+          fetching: false
+        });
+      }
+    );
   }
 
-  handleSearchChange(e){
-    const {value} = e.target
+  handleSearchChange(e) {
+    const { value } = e.target;
     this.setState({
       ...this.state,
       searchKey: value
-    })
-    this.getProducts(1, value)
+    });
+    this.getProducts(1, value);
   }
 
-  loadMoreProducts(){
-    this.getProducts(this.state.page + 1, this.state.searchKey)
-  }
+  loadMoreProducts = () => {
+    this.getProducts(this.state.page + 1, this.state.searchKey);
+  };
 
-  componentWillMount(){
-    this.getProducts(1)
+  componentWillMount() {
+    this.getProducts(1);
   }
 
   render() {
@@ -166,51 +182,66 @@ class ProductLists extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-        <InputGroup>
-        <Input placeholder="Search Products" onChange={e => this.handleSearchChange(e)}  />
-        <InputGroupAddon addonType="append">Search</InputGroupAddon>
-      </InputGroup>
-      </CardHeader>
-      <CardBlock>
-        <Row>
-          { this.state.productList.length && !this.state.fetching ? this.state.productList.map((product, i) => (
-            this.state.user === 'admin' ? <AdminProductList
-              key={i}
-              data={product}
-              toggleDeletePrompt={prod => this.toggleDeletePrompt(prod)}
-              togglePremiumPrompt={prod => this.togglePremiumPrompt(prod)}
-            /> :
-            <ProductList
-              key={i}
-              data={product}
+            <InputGroup>
+              <Input
+                placeholder="Search Products"
+                onChange={e => this.handleSearchChange(e)}
+              />
+              <InputGroupAddon addonType="append">Search</InputGroupAddon>
+            </InputGroup>
+          </CardHeader>
+          <CardBlock>
+            <Row>
+              {this.state.productList.length && !this.state.fetching ? (
+                this.state.productList.map(
+                  (product, i) =>
+                    this.state.user === "admin" ? (
+                      <AdminProductList
+                        key={i}
+                        data={product}
+                        toggleDeletePrompt={prod =>
+                          this.toggleDeletePrompt(prod)
+                        }
+                        togglePremiumPrompt={prod =>
+                          this.togglePremiumPrompt(prod)
+                        }
+                      />
+                    ) : (
+                      <ProductList key={i} data={product} />
+                    )
+                )
+              ) : this.state.fetching ? (
+                <Loading />
+              ) : (
+                <CardBlock> Ooops, No Results Found... </CardBlock>
+              )}
+            </Row>
+            <Prompt
+              show={this.state.showDeletePrompt}
+              confirmButtonText="Delete"
+              handleConfirmation={prod => this.deleteProduct(prod)}
+              toggle={prod => this.toggleDeletePrompt(prod)}
+              confirmText={deleteConfirmText}
+              title="Delete"
+              fetching={this.state.isFetching}
             />
-          )) : this.state.fetching ? <Loading /> :
-          <CardBlock> Ooops, No Results Found... </CardBlock>
-          }
-        </Row>
-        <Prompt
-          show={this.state.showDeletePrompt}
-          confirmButtonText="Delete"
-          handleConfirmation={(prod) => this.deleteProduct(prod)}
-          toggle={(prod) => this.toggleDeletePrompt(prod)}
-          confirmText={deleteConfirmText}
-          title="Delete"
-          fetching={this.state.isFetching}
-        />
-        <Prompt
-          show={this.state.showPremiumPrompt}
-          confirmButtonText="Change"
-          handleConfirmation={() => this.togglePremiumContents()}
-          toggle={() => this.togglePremiumPrompt()}
-          confirmText={premiumConfirmText}
-          title="Change Premium Content"
-          fetching={this.state.isFetching}
-        />
-        </CardBlock>
+            <Prompt
+              show={this.state.showPremiumPrompt}
+              confirmButtonText="Change"
+              handleConfirmation={() => this.togglePremiumContents()}
+              toggle={() => this.togglePremiumPrompt()}
+              confirmText={premiumConfirmText}
+              title="Change Premium Content"
+              fetching={this.state.isFetching}
+            />
+          </CardBlock>
+          {this.state.productList.length < this.state.count ? (
+            <Button onClick={this.loadMoreProducts}>Show More</Button>
+          ) : null}
           <CardFooter>
-            Showing {this.state.productList.length} of {this.state.count} 
+            Showing {this.state.productList.length} of {this.state.count}
           </CardFooter>
-      </Card>
+        </Card>
       </div>
     );
   }
