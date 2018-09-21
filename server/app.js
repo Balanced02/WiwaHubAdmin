@@ -2,11 +2,9 @@ import express from "express";
 import logger from "morgan";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import morgan from "morgan";
 import dotenv from "dotenv";
 import routes from "./routes";
 import cors from "cors";
-
 
 require("dotenv").config();
 

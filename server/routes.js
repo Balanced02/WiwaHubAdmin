@@ -10,12 +10,14 @@ import mongoose from 'mongoose'
 import cfg from "./controllers/config";
 import jwt from "jsonwebtoken";
 import Users from "./models/Users";
+import Products from './models/Products'
 import fileUpload from "express-fileupload";
 import uuid from "uuid/v4";
 import cloudinary from "cloudinary";
 import morgan from "morgan";
 import fs from 'fs'
 import dotenv from "dotenv";
+import cron from 'node-cron'
 
 require("dotenv").config();
 
@@ -188,4 +190,28 @@ api.post("/createProduct", (req, res) => {
     .then(result => CreateProduct(req, res, result))
     .catch(err => res.status(500).json({ error: err }));
 });
+
+cron.schedule("* * 1 * *", async () => {
+  let oneday = 8.64e7
+  let search = {
+    $lt: (new Date(Date.now() - 7 * oneday)).toString()
+  }
+  console.log("cleanup in progress")
+  try {
+    let [products, count] = await Promise.all([ Products.find({
+      created: search
+    }), Products.find({
+      created: search
+    }).count()])
+    if (products) {
+      products.forEach(product => {
+        deleteImage(product.picName)
+        Products.findOneAndRemove({ _id: product._id })
+      })
+    }
+  } catch (err) {
+    console.log(err)
+  }
+})
+
 export default router;

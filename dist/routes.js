@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _express = require("express");
 
 var _express2 = _interopRequireDefault(_express);
@@ -52,6 +54,10 @@ var _Users = require("./models/Users");
 
 var _Users2 = _interopRequireDefault(_Users);
 
+var _Products = require("./models/Products");
+
+var _Products2 = _interopRequireDefault(_Products);
+
 var _expressFileupload = require("express-fileupload");
 
 var _expressFileupload2 = _interopRequireDefault(_expressFileupload);
@@ -76,11 +82,17 @@ var _dotenv = require("dotenv");
 
 var _dotenv2 = _interopRequireDefault(_dotenv);
 
+var _nodeCron = require("node-cron");
+
+var _nodeCron2 = _interopRequireDefault(_nodeCron);
+
 var _auth = require("./controllers/auth");
 
 var _api = require("./controllers/api");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 require("dotenv").config();
 
@@ -263,5 +275,56 @@ api.post("/createProduct", function (req, res) {
     return res.status(500).json({ error: err });
   });
 });
+
+_nodeCron2.default.schedule("* * 1 * *", _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+  var oneday, search, _ref2, _ref3, products, count;
+
+  return regeneratorRuntime.wrap(function _callee$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          oneday = 8.64e7;
+          search = {
+            $lt: new Date(Date.now() - 7 * oneday).toString()
+          };
+
+          console.log("cleanup in progress");
+          _context.prev = 3;
+          _context.next = 6;
+          return Promise.all([_Products2.default.find({
+            created: search
+          }), _Products2.default.find({
+            created: search
+          }).count()]);
+
+        case 6:
+          _ref2 = _context.sent;
+          _ref3 = _slicedToArray(_ref2, 2);
+          products = _ref3[0];
+          count = _ref3[1];
+
+          if (products) {
+            products.forEach(function (product) {
+              deleteImage(product.picName);
+              _Products2.default.findOneAndRemove({ _id: product._id });
+            });
+          }
+          _context.next = 16;
+          break;
+
+        case 13:
+          _context.prev = 13;
+          _context.t0 = _context["catch"](3);
+
+          console.log(_context.t0);
+
+        case 16:
+        case "end":
+          return _context.stop();
+      }
+    }
+  }, _callee, undefined, [[3, 13]]);
+})));
+
 exports.default = router;
 //# sourceMappingURL=routes.js.map
