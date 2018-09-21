@@ -87,13 +87,14 @@ var Login = exports.Login = function Login(req, res) {
 // Get user data from client side
 var AuthMe = exports.AuthMe = function AuthMe(req, res) {
   var user = JSON.parse(req.headers.user);
-  if (user.username) {
+  var token = req.headers.token;
+  if (user.username && token) {
     return res.json({
       authenticated: true,
       user: user
     });
   }
-  return res.json({
+  return res.redirect('/login').json({
     authenticated: false
   });
 };

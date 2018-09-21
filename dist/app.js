@@ -81,12 +81,10 @@ app.use((0, _morgan2.default)("dev", {
 }));
 app.use(_bodyParser2.default.json());
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
-// app.use(
-//   cors({
-//     origin: "http://localhost:1337/",
-//     credentials: true
-//   })
-// );
+app.use((0, _cors2.default)({
+  origin: "http://localhost:1337/",
+  credentials: true
+}));
 app.use((0, _morgan2.default)("dev"));
 app.use((0, _expressFileupload2.default)());
 app.use("/images", _express2.default.static(_path2.default.join(__dirname, "../client/public")));
