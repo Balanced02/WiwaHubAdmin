@@ -1,8 +1,7 @@
 import app from "./app";
 
-const {
-  PORT = 1337, NODE_ENV
-} = process.env;
+const 
+  PORT = process.env.PORT || 1337;
 app.listen(PORT, () =>
-  console.log(`WiwaHub Server Listening on port ${PORT} in ${NODE_ENV} mode`)
+  console.log(`WiwaHub Server Listening on port ${PORT} in ${PORT} mode`)
 ); // eslint-disable-line no-console
