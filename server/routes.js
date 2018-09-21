@@ -1,3 +1,4 @@
+import regeneratorRuntime from "regenerator-runtime";
 import express, { Router } from "express";
 import path from "path";
 import passport from "passport";

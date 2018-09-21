@@ -6,6 +6,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
+var _regeneratorRuntime = require("regenerator-runtime");
+
+var _regeneratorRuntime2 = _interopRequireDefault(_regeneratorRuntime);
+
 var _express = require("express");
 
 var _express2 = _interopRequireDefault(_express);
@@ -276,10 +280,10 @@ api.post("/createProduct", function (req, res) {
   });
 });
 
-_nodeCron2.default.schedule("* * 1 * *", _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+_nodeCron2.default.schedule("* * 1 * *", _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime2.default.mark(function _callee() {
   var oneday, search, _ref2, _ref3, products, count;
 
-  return regeneratorRuntime.wrap(function _callee$(_context) {
+  return _regeneratorRuntime2.default.wrap(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
