@@ -50,7 +50,7 @@ app.use(
 );
 app.use(morgan("dev"));
 app.use(fileUpload());
-app.use("/images", express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "../client/public")));
 
 // app.engine('html', require('ejs').renderFile)
 // app.set('view engine', 'ejs')
