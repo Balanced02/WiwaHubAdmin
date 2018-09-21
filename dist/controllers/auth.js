@@ -78,10 +78,10 @@ var Login = exports.Login = function Login(req, res) {
 
 // Get user data from client side
 var AuthMe = exports.AuthMe = function AuthMe(req, res) {
-  if (!req.user) {
+  if (req.user) {
     return res.json({
       authenticated: true,
-      user: user
+      user: req.user
     });
   }
   return res.json({
@@ -93,7 +93,7 @@ var AuthMe = exports.AuthMe = function AuthMe(req, res) {
 var RedirectNoAuth = exports.RedirectNoAuth = function RedirectNoAuth(req, res, next) {
   var user = req.user;
   if (!user) {
-    return res.redirect("/whatever");
+    return res.redirect("/");
   }
   return next();
 };

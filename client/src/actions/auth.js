@@ -14,11 +14,9 @@ export const login = user => {
 
 export const logout = () => {
   return dispatch => {
-    localStorage.clear();
     history.push("/login");
     callApi("/auth/logout")
       .then(data => {
-        window.location.reload()
         type: LOGOUT;
       })
       .catch(err => {

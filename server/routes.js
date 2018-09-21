@@ -3,18 +3,51 @@ import path from "path";
 import passport from "passport";
 import passportLocal from "passport-local";
 import multer from "multer";
+import connectMongo from 'connect-mongo';
+import session from 'express-session';
+import cookieParser from 'cookie-parser'
+import mongoose from 'mongoose'
 import cfg from "./controllers/config";
 import jwt from "jsonwebtoken";
 import Users from "./models/Users";
+import fileUpload from "express-fileupload";
+import uuid from "uuid/v4";
+import cloudinary from "cloudinary";
+import morgan from "morgan";
+import fs from 'fs'
+import dotenv from "dotenv";
+
+require("dotenv").config();
 
 import { Register, Logout, Login, AuthMe, RedirectNoAuth} from "./controllers/auth";
-import { GetProducts, ChangePremium, } from "./controllers/api";
+import { GetProducts, ChangePremium, CreateProduct, DeleteProduct } from "./controllers/api";
+
+dotenv.config({
+  configPath:
+    process.env.NODE_ENV === "production" ? "../config/prod" : "../config/dev"
+});
+
 
 const router = Router();
 const api = Router();
 
 router.use(express.static(path.join(__dirname, "../client/build")));
 
+const MongoStore = connectMongo(session)
+router.use(cookieParser())
+router.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'unkn0wn wiwahub s3Cret',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 3.6e6, // 1 Hour session
+    },
+    store: new MongoStore({
+      mongooseConnection: mongoose.connection,
+    }),
+  })
+)
 
 var upload = multer({ dest: "./public/logos" });
 
@@ -84,7 +117,75 @@ api.post('/auth/login', passport.authenticate('local'), Login)
 // });
 api.use(RedirectNoAuth)
 
+api.use(morgan("dev"));
+api.use(fileUpload());
+api.use("/images", express.static(path.join(__dirname, "../client/public")));
+
+// app.engine('html', require('ejs').renderFile)
+// app.set('view engine', 'ejs')
+cloudinary.config({
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret
+});
+
+const uploadFile = imageFile => {
+  fs.readdir(path.join(__dirname, "public"), (err, files) => {
+    if (err) {
+      console.log(err)
+    };
+    for (const file of files) {
+      fs.unlink(path.join(path.join(__dirname, 'public'), file), err => {
+        if (err) {
+          console.log(err)
+        }
+      });
+    }
+  });
+  return new Promise((resolve, reject) => {
+    const newFilename = uuid();
+    imageFile.mv(
+      `${__dirname}/public/${newFilename}-${imageFile.name}`,
+      function(err) {
+        if (err) {
+          console.log(err)
+          reject(err);
+        }
+        cloudinary.uploader.upload(
+          `${__dirname}/public/${newFilename}-${imageFile.name}`,
+          result => {
+            resolve(result);
+          }
+        );
+      }
+    );
+  });
+};
+
+const deleteImage = public_id => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(public_id, (err, result) => {
+      resolve(result)
+    })
+  })
+}
+
+api.post('/api/deleteProduct/:id', (req, res) => {
+  let public_id = req.body.picName
+  deleteImage(public_id)
+    .then(result => DeleteProduct(req, res, result))
+    .catch(err => res.status(500).json({error: err}) )
+})
+
+
 api.post('/getProducts/:id', GetProducts);
 api.post('/changePremium', ChangePremium);
-
+api.post("/createProduct", (req, res) => {
+  const user = req.user;
+  console.log(user)
+  let imageFile = req.files.file;
+  uploadFile(imageFile)
+    .then(result => CreateProduct(req, res, result))
+    .catch(err => res.status(500).json({ error: err }));
+});
 export default router;

@@ -47,6 +47,7 @@ class DefaultLayout extends Component {
           } else {
             this.setState({
               ready: false,
+              redirect: true,
             });
           }
         })

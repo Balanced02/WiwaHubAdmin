@@ -15,6 +15,7 @@ export const callApi = (url, data, method) => {
     };
     if (method === "POST") {
       options.body = JSON.stringify(data);
+      options.headers = {}
       options.headers.Accept = "application/json";
       options.headers["Content-Type"] = "application/json";
     }
@@ -44,6 +45,7 @@ export const callApiWithFormData = (url, data, method, file) => {
     };
     if (method === "POST") {
       options.body = photo;
+      options.headers = {}
       options.headers.Accept = "application/json";
     }
     fetch(`${jwtConfig.fetchUrl}api${url}`, options)

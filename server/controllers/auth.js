@@ -54,10 +54,10 @@ export const Login = (req, res) => {
 
 // Get user data from client side
 export const AuthMe = (req, res) => {
-  if (!req.user ) {
+  if (req.user) {
     return res.json({
       authenticated: true,
-      user: user
+      user: req.user
     });
   }
   return res.json({
@@ -69,7 +69,7 @@ export const AuthMe = (req, res) => {
 export const RedirectNoAuth = (req, res, next) => {
   let user = req.user
   if (!user) {
-    return res.redirect("/whatever");
+    return res.redirect("/");
   }
   return next();
 };

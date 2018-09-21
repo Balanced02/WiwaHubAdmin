@@ -108,7 +108,7 @@ var GetProducts = exports.GetProducts = function () {
             }
             _context.prev = 5;
             _context.next = 8;
-            return Promise.all([_Products2.default.find(searchQuery).count(), _Products2.default.find(searchQuery).sort("created").limit(page * 25)]);
+            return Promise.all([_Products2.default.find(searchQuery).count(), _Products2.default.find(searchQuery).sort("created").skip(page * 25 - 25).limit(25)]);
 
           case 8:
             _ref2 = _context.sent;
