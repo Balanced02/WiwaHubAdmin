@@ -44,7 +44,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: "http://wiwahub.herokuapp.com/",
+    origin: "http://wiwahub.herokuapp.com",
     credentials: true
   })
 );
