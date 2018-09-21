@@ -37,7 +37,6 @@ export const startRegister = formData => {
         dispatch(showInfo("Registration Successful! Please go to Login"));
         console.log(data);
         history.push("/login");
-        window.location.reload()
       })
       .catch(err => {
         console.log(err);
@@ -52,12 +51,9 @@ export const startLogin = formData => {
     dispatch(startLoading());
     callApi("/auth/login", formData, "POST")
       .then(data => {
-        localStorage.setItem("jwt", data.token);
-        localStorage.setItem("wiwaHub", JSON.stringify(data.user._doc));
         dispatch(stopLoading());
         dispatch(login(data.user));
         history.push("/dashboard");
-        window.location.reload()
       })
       .catch(err => {
         console.log(err);

@@ -102,7 +102,7 @@ const deleteImage = public_id => {
 }
 
 app.post("/api/createProduct", (req, res) => {
-  const user = JSON.parse(req.headers.user);
+  const user = req.user;
   console.log(user)
   let imageFile = req.files.file;
   uploadFile(imageFile)

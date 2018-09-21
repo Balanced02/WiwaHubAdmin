@@ -4,8 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _express = require("express");
 
 var _express2 = _interopRequireDefault(_express);
@@ -34,10 +32,6 @@ var _jsonwebtoken = require("jsonwebtoken");
 
 var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
 
-var _passportJwt = require("passport-jwt");
-
-var _passportJwt2 = _interopRequireDefault(_passportJwt);
-
 var _Users = require("./models/Users");
 
 var _Users2 = _interopRequireDefault(_Users);
@@ -53,27 +47,35 @@ var api = (0, _express.Router)();
 
 router.use(_express2.default.static(_path2.default.join(__dirname, "../client/build")));
 
-var JWTStrategy = _passportJwt2.default.Strategy;
-var ExtractJWT = _passportJwt2.default.ExtractJwt;
-
 var upload = (0, _multer2.default)({ dest: "./public/logos" });
 
 // PassportJS Setup
 router.use(_passport2.default.initialize());
+router.use(_passport2.default.session());
 
 var LocalStrategy = _passportLocal2.default.Strategy;
 _passport2.default.use(new LocalStrategy(_Users2.default.authenticate()));
-_passport2.default.use(new JWTStrategy({
-  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey: _config2.default.jwtSecret
-}, function (jwtPayload, cb) {
-  //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
-  return _Users2.default.findOne(jwtPayload.id).then(function (user) {
-    return cb(null, user);
-  }).catch(function (err) {
-    return cb(err);
-  });
-}));
+_passport2.default.serializeUser(_Users2.default.serializeUser());
+_passport2.default.deserializeUser(_Users2.default.deserializeUser());
+
+// passport.use(
+//   new JWTStrategy(
+//     {
+//       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+//       secretOrKey: cfg.jwtSecret
+//     },
+//     function(jwtPayload, cb) {
+//       //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
+//       return Users.findOne(jwtPayload.id)
+//         .then(user => {
+//           return cb(null, user);
+//         })
+//         .catch(err => {
+//           return cb(err);
+//         });
+//     }
+//   )
+// );
 
 //image upload temporary function
 
@@ -82,32 +84,35 @@ router.use("/api", api);
 api.get("/me", _auth.AuthMe);
 api.get("/auth/logout", _auth.Logout);
 api.post("/auth/register", _auth.Register);
-api.post("/auth/login", function (req, res, next) {
-  _passport2.default.authenticate("local", { session: false }, function (err, user, info) {
-    if (err || !user) {
-      console.log(user);
-      return res.status(400).json({
-        message: "Something is not right",
-        user: user
-      });
-    }
-    req.login(user, { session: false }, function (err) {
-      if (err) {
-        res.send(err);
-      }
-      // generate a signed son web token with the contents of user object and return it in the response
-      var token = _jsonwebtoken2.default.sign(user.toJSON(), _config2.default.jwtSecret);
-      console.log("Logged In!!!");
-      return res.json({
-        user: _extends({}, user, {
-          salt: undefined,
-          hash: undefined
-        }),
-        token: token
-      });
-    });
-  })(req, res);
-});
+api.post('/auth/login', _passport2.default.authenticate('local'), _auth.Login);
+// api.post("/auth/login", function(req, res, next) {
+//   passport.authenticate("local", { session: false }, (err, user, info) => {
+//     if (err || !user) {
+//       console.log(user);
+//       return res.status(400).json({
+//         message: "Something is not right",
+//         user: user
+//       });
+//     }
+//     req.login(user, { session: false }, err => {
+//       if (err) {
+//         res.send(err);
+//       }
+//       // generate a signed son web token with the contents of user object and return it in the response
+//       const token = jwt.sign(user.toJSON(), cfg.jwtSecret);
+//       console.log("Logged In!!!");
+//       return res.json({
+//         user: {
+//           ...user,
+//           salt: undefined,
+//           hash: undefined
+//         },
+//         token
+//       });
+//     });
+//   })(req, res);
+// });
+api.use(_auth.RedirectNoAuth);
 
 api.post('/getProducts/:id', _api.GetProducts);
 api.post('/changePremium', _api.ChangePremium);

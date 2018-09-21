@@ -36,7 +36,7 @@ var _passportJwt2 = _interopRequireDefault(_passportJwt);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Register = exports.Register = function Register(req, res) {
-  var user = JSON.parse(req.headers.user);
+  var user = req.user;
   userRegister(req.body).then(function (user) {
     return res.json({
       message: "Registered Successfully",
@@ -66,29 +66,19 @@ var userRegister = function userRegister(body, user) {
 };
 
 var Login = exports.Login = function Login(req, res) {
-  _passport2.default.authenticate("jwt", { session: false }, function (err, user, info) {
-    if (err || !user) {
-      return res.status(400).json({
-        message: "Something is not right",
-        user: user
-      });
-    }
-    req.login(user, { session: false }, function (err) {
-      if (err) {
-        res.send(err);
-      }
-      // generate a signed son web token with the contents of user object and return it in the response
-      var token = _jsonwebtoken2.default.sign(user, _config2.default.jwtSecret);
-      return res.json({ user: user, token: token });
-    });
+  var user = req.user;
+  return res.json({
+    message: 'Login Successful',
+    user: _extends({}, req.user, {
+      salt: undefined,
+      hash: undefined
+    })
   });
 };
 
 // Get user data from client side
 var AuthMe = exports.AuthMe = function AuthMe(req, res) {
-  var user = JSON.parse(req.headers.user);
-  var token = req.headers.token;
-  if (user.username && token) {
+  if (!req.user) {
     return res.json({
       authenticated: true,
       user: user
@@ -101,7 +91,7 @@ var AuthMe = exports.AuthMe = function AuthMe(req, res) {
 
 // Auth Middleware
 var RedirectNoAuth = exports.RedirectNoAuth = function RedirectNoAuth(req, res, next) {
-  var user = JSON.parse(req.headers.user);
+  var user = req.user;
   if (!user) {
     return res.redirect("/whatever");
   }

@@ -29,8 +29,7 @@ export const ChangePremium = (req, res) => {
 
 export const CreateProduct = (req, res, result) => {
   const { url, public_id } = result
-  console.log(req.headers)
-  const user = JSON.parse(req.headers.user);
+  const user = req.user;
   const {title, state, localGovtArea, price, negotiable} = JSON.parse(req.body.data)
   const productDetails = {
     title, state, localGovtArea, price, negotiable,

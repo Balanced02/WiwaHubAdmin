@@ -2,8 +2,6 @@ import "whatwg-fetch";
 import { jwtConfig } from "../config";
 import upload from "superagent";
 
-var token = localStorage.getItem("jwt") || "";
-var user = localStorage.getItem("wiwaHub") || "{}";
 
 export const callApi = (url, data, method) => {
   console.log("Calling API... " + url);
@@ -14,7 +12,6 @@ export const callApi = (url, data, method) => {
       redirect: "follow",
       compress: true,
       credentials: "include",
-      headers: { Authorization: "Bearer " + token, user }
     };
     if (method === "POST") {
       options.body = JSON.stringify(data);
@@ -44,7 +41,6 @@ export const callApiWithFormData = (url, data, method, file) => {
       mode: "cors",
       redirect: "follow",
       credentials: "include",
-      headers: { Authorization: "Bearer " + token, user }
     };
     if (method === "POST") {
       options.body = photo;

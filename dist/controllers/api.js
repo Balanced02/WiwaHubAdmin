@@ -49,8 +49,7 @@ var CreateProduct = exports.CreateProduct = function CreateProduct(req, res, res
   var url = result.url,
       public_id = result.public_id;
 
-  console.log(req.headers);
-  var user = JSON.parse(req.headers.user);
+  var user = req.user;
 
   var _JSON$parse = JSON.parse(req.body.data),
       title = _JSON$parse.title,

@@ -7,7 +7,7 @@ import cfg from "./config";
 import jwt from "jsonwebtoken";
 import PassportJWT from "passport-jwt";
 export const Register = (req, res) => {
-  let user = JSON.parse(req.headers.user);
+  let user = req.user
   userRegister(req.body)
     .then(user => {
       return res.json({
@@ -40,29 +40,21 @@ const userRegister = (body, user) => {
 };
 
 export const Login = (req, res) => {
-  passport.authenticate("jwt", { session: false }, (err, user, info) => {
-    if (err || !user) {
-      return res.status(400).json({
-        message: "Something is not right",
-        user: user
-      });
-    }
-    req.login(user, { session: false }, err => {
-      if (err) {
-        res.send(err);
-      }
-      // generate a signed son web token with the contents of user object and return it in the response
-      const token = jwt.sign(user, cfg.jwtSecret);
-      return res.json({ user, token });
-    });
-  });
-};
+  let user = req.user
+  return res.json({
+    message: 'Login Successful',
+    user: {
+      ...req.user,
+      salt: undefined,
+      hash: undefined,
+    },
+  })
+}
+
 
 // Get user data from client side
 export const AuthMe = (req, res) => {
-  let user = JSON.parse(req.headers.user);
-  let token = req.headers.token
-  if (user.username && token ) {
+  if (!req.user ) {
     return res.json({
       authenticated: true,
       user: user
@@ -75,7 +67,7 @@ export const AuthMe = (req, res) => {
 
 // Auth Middleware
 export const RedirectNoAuth = (req, res, next) => {
-  let user = JSON.parse(req.headers.user);
+  let user = req.user
   if (!user) {
     return res.redirect("/whatever");
   }

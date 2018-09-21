@@ -154,7 +154,7 @@ var deleteImage = function deleteImage(public_id) {
 };
 
 app.post("/api/createProduct", function (req, res) {
-  var user = JSON.parse(req.headers.user);
+  var user = req.user;
   console.log(user);
   var imageFile = req.files.file;
   uploadFile(imageFile).then(function (result) {
