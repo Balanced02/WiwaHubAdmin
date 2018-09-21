@@ -31,6 +31,16 @@ const usersSchema = new Schema({
   phoneNumber: {
     type: String,
     required: true
+  },
+  verified: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  created: {
+    type: Date,
+    required: true,
+    default: Date.now,
   }
 });
 

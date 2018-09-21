@@ -14,6 +14,8 @@ import { GetProducts, ChangePremium, } from "./controllers/api";
 const router = Router();
 const api = Router();
 
+router.use(express.static(path.join(__dirname, "../client/build")));
+
 const JWTStrategy = PassportJWT.Strategy;
 const ExtractJWT = PassportJWT.ExtractJwt;
 
@@ -42,8 +44,6 @@ passport.use(
     }
   )
 );
-
-router.use(express.static(path.join(__dirname, "../client/build")));
 
 //image upload temporary function
 

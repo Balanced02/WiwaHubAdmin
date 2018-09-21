@@ -180,7 +180,7 @@ class ProductLists extends Component {
     );
     return (
       <div className="animated fadeIn">
-        <Card>
+        <Card >
           <CardHeader>
             <InputGroup>
               <Input
