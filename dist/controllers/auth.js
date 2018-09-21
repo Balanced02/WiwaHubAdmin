@@ -94,7 +94,7 @@ var AuthMe = exports.AuthMe = function AuthMe(req, res) {
       user: user
     });
   }
-  return res.redirect('/login').json({
+  return res.json({
     authenticated: false
   });
 };
