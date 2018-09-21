@@ -38,6 +38,7 @@ class DefaultLayout extends Component {
     if (!this.props.authenticated) {
       callApi("/me")
         .then(response => {
+          console.log(response)
           if (response.authenticated) {
             this.props.dispatch(login(response.user));
             this.setState({

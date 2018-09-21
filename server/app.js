@@ -42,12 +42,12 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(
-  cors({
-    origin: "http://wiwahub.herokuapp.com/",
-    credentials: true
-  })
-);
+// app.use(
+//   cors({
+//     origin: "http://localhost:1337/",
+//     credentials: true
+//   })
+// );
 app.use(morgan("dev"));
 app.use(fileUpload());
 app.use("/images", express.static(path.join(__dirname, "../client/public")));

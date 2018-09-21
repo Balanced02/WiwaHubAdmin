@@ -61,7 +61,8 @@ export const Login = (req, res) => {
 // Get user data from client side
 export const AuthMe = (req, res) => {
   let user = JSON.parse(req.headers.user);
-  if (user.username) {
+  let token = req.headers.token
+  if (user.username && token ) {
     return res.json({
       authenticated: true,
       user: user

@@ -49,7 +49,6 @@
     "build-css": "node-sass-chokidar --include-path ./node_modules ./src/scss -o ./src/scss",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./node_modules ./src/scss -o ./src/scss --watch --recursive",
     "start-js": "react-scripts start",
-    "prestart": "npm install",
     "start": "npm-run-all -p watch-css start-js",
     "dev": "npm-run-all -p watch-css start-js",
     "build-js": "react-scripts build",
