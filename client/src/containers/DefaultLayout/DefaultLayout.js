@@ -69,7 +69,7 @@ class DefaultLayout extends Component {
           <DefaultHeader />
         </AppHeader>{" "}
         <div className="app-body">
-          <AppSidebar fixed display="lg" style={{ backgroundColor: "#005400" }} >
+          <AppSidebar fixed display="lg" >
             <AppSidebarHeader />
             <AppSidebarForm />
             <AppSidebarNav navConfig={navigation} {...this.props} />{" "}

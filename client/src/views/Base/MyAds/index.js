@@ -11,7 +11,6 @@ import {
   CardFooter
 } from "reactstrap";
 import { connect } from "react-redux";
-import ProductList from "../../../components/ProductList";
 import AdminProductList from "../../../components/AdminProductList";
 import { callApi } from "../../../utils/index";
 import { showError, showInfo } from "../../../actions/feedback";
@@ -50,7 +49,7 @@ class ProductLists extends Component {
     });
   }
 
-  deleteProduct() {
+  deleteProduct = () => {
     console.log(this.state.selectedProduct);
     const id = this.state.selectedProduct._id;
     if (!id) {
@@ -84,7 +83,7 @@ class ProductLists extends Component {
     });
   }
 
-  togglePremiumContents() {
+  togglePremiumContents = () => {
     const product = this.state.selectedProduct;
     if (!product._id) {
       this.togglePremiumPrompt();
@@ -115,7 +114,7 @@ class ProductLists extends Component {
     });
   }
 
-  togglePremiumPrompt(product = {}) {
+  togglePremiumPrompt = (product = {}) => {
     this.setState(prev => ({
       ...this.state,
       selectedProduct: product,
@@ -123,7 +122,7 @@ class ProductLists extends Component {
     }));
   }
 
-  toggleDeletePrompt(product = {}) {
+  toggleDeletePrompt = (product = {}) => {
     this.setState(prev => ({
       ...this.state,
       selectedProduct: product,
@@ -132,7 +131,7 @@ class ProductLists extends Component {
   }
 
   getProducts(id, searchKey = "", type) {
-    callApi(`/getProducts/${id}`, { searchKey: searchKey }, "POST").then(
+    callApi(`/getMyAds/${id}`, { searchKey: searchKey }, "POST").then(
       ({ products, count }) => {
         this.setState({
           ...this.state,
@@ -148,7 +147,7 @@ class ProductLists extends Component {
     const { value } = e.target;
     this.setState({
       ...this.state,
-      searchKey: value
+      searchKey: value,
     });
     this.getProducts(1, value, 'search');
   }
@@ -195,20 +194,7 @@ class ProductLists extends Component {
               {this.state.productList.length && !this.state.fetching ? (
                 this.state.productList.map(
                   (product, i) =>
-                    this.state.user === "admin" ? (
-                      <AdminProductList
-                        key={i}
-                        data={product}
-                        toggleDeletePrompt={prod =>
-                          this.toggleDeletePrompt(prod)
-                        }
-                        togglePremiumPrompt={prod =>
-                          this.togglePremiumPrompt(prod)
-                        }
-                      />
-                    ) : (
-                      <ProductList key={i} data={product} />
-                    )
+                      <AdminProductList key={i} data={product} toggleDeletePrompt={this.toggleDeletePrompt} togglePremiumPrompt ={ this.togglePremiumPrompt} type='myAds' />
                 )
               ) : this.state.fetching ? (
                 <Loading />

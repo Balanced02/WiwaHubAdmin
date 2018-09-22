@@ -23,7 +23,7 @@ import cron from 'node-cron'
 require("dotenv").config();
 
 import { Register, Logout, Login, AuthMe, RedirectNoAuth} from "./controllers/auth";
-import { GetProducts, ChangePremium, CreateProduct, DeleteProduct } from "./controllers/api";
+import { GetProducts, ChangePremium, CreateProduct, DeleteProduct, MyAds, GetSummary } from "./controllers/api";
 
 dotenv.config({
   configPath:
@@ -182,7 +182,9 @@ api.post('/api/deleteProduct/:id', (req, res) => {
 
 
 api.post('/getProducts/:id', GetProducts);
+api.post('/getMyAds/:id', MyAds);
 api.post('/changePremium', ChangePremium);
+api.get("/getSummary", GetSummary)
 api.post("/createProduct", (req, res) => {
   const user = req.user;
   console.log(user)
@@ -195,7 +197,7 @@ api.post("/createProduct", (req, res) => {
 cron.schedule("* * 1 * *", async () => {
   let oneday = 8.64e7
   let search = {
-    $lt: (new Date(Date.now() - 7 * oneday)).toString()
+    $lt: (new Date(Date.now() - 30 * oneday)).toString()
   }
   console.log("cleanup in progress")
   try {

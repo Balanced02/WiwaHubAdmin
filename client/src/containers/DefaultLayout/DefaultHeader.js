@@ -37,8 +37,8 @@ class DefaultHeader extends Component {
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppNavbarBrand
-          full={{ src: logo, width: 89, height: 25, alt: "CoreUI Logo" }}
-          minimized={{ src: sygnet, width: 30, height: 30, alt: "CoreUI Logo" }}
+          full={{ src: logo, width: 200, height: 50, alt: "WiwaHub Logo" }}
+          minimized={{ src: sygnet, width: 30, height: 30, alt: "WiwaHub Logo" }}
         />
         <AppSidebarToggler className="d-md-down-none" display="lg" />
 
@@ -46,32 +46,8 @@ class DefaultHeader extends Component {
           <NavItem className="px-3">
             <NavLink href="/">Dashboard</NavLink>
           </NavItem>
-          <NavItem className="px-3">
-            <NavLink href="#">Users</NavLink>
-          </NavItem>
-          <NavItem className="px-3">
-            <NavLink href="#">Settings</NavLink>
-          </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
-          <NavItem className="d-md-down-none">
-            <NavLink href="#">
-              <i className="icon-bell" />
-              <Badge pill color="danger">
-                5
-              </Badge>
-            </NavLink>
-          </NavItem>
-          <NavItem className="d-md-down-none">
-            <NavLink href="#">
-              <i className="icon-list" />
-            </NavLink>
-          </NavItem>
-          <NavItem className="d-md-down-none">
-            <NavLink href="#">
-              <i className="icon-location-pin" />
-            </NavLink>
-          </NavItem>
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
               <img
@@ -133,8 +109,6 @@ class DefaultHeader extends Component {
             </DropdownMenu>
           </AppHeaderDropdown>
         </Nav>
-        <AppAsideToggler className="d-md-down-none" />
-        {/*<AppAsideToggler className="d-lg-none" mobile />*/}
       </React.Fragment>
     );
   }

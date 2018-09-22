@@ -5,7 +5,7 @@ import Products from "../models/Products";
 
 export const ChangePremium = (req, res) => {
   let id = req.body._id;
-  let premium  = req.body;
+  let premium = req.body;
   Products.findOneAndUpdate(
     {
       _id: id
@@ -28,11 +28,17 @@ export const ChangePremium = (req, res) => {
 };
 
 export const CreateProduct = (req, res, result) => {
-  const { url, public_id } = result
+  const { url, public_id } = result;
   const user = req.user;
-  const {title, state, localGovtArea, price, negotiable} = JSON.parse(req.body.data)
+  const { title, state, localGovtArea, price, negotiable } = JSON.parse(
+    req.body.data
+  );
   const productDetails = {
-    title, state, localGovtArea, price, negotiable,
+    title,
+    state,
+    localGovtArea,
+    price,
+    negotiable,
     product: url,
     picName: public_id
   };
@@ -46,13 +52,13 @@ export const CreateProduct = (req, res, result) => {
 
 export const GetProducts = async (req, res) => {
   let page = parseInt(Number(req.params.id));
-  let searchKey = req.body.searchKey
-  let searchQuery = {}
+  let searchKey = req.body.searchKey;
+  let searchQuery = {};
   if (searchKey) {
     let search = {
-      $regex: searchKey || '',
-      $options: 'i',
-    }
+      $regex: searchKey || "",
+      $options: "i"
+    };
     searchQuery = {
       $or: [
         {
@@ -113,14 +119,108 @@ export const GetProducts = async (req, res) => {
 };
 
 export const DeleteProduct = (req, res, result) => {
-  console.log(result)
+  console.log(result);
   let _id = req.params.id;
-  Products.findOneAndRemove({ _id }).then(data => res.json({
-    message: 'Deleted Successfully'
-  })).catch(err => {
+  Products.findOneAndRemove({ _id })
+    .then(data =>
+      res.json({
+        message: "Deleted Successfully"
+      })
+    )
+    .catch(err => {
+      res.status(500).json({
+        message: "Unable to delete Product",
+        error: err.message
+      });
+    });
+};
+
+export const MyAds = async (req, res) => {
+  let page = parseInt(Number(req.params.id));
+  let searchKey = req.body.searchKey;
+  let sid = req.user.sid;
+  let searchQuery = { username: sid };
+  if (searchKey) {
+    let search = {
+      $regex: searchKey || "",
+      $options: "i"
+    };
+    searchQuery.$or = [
+      {
+        sid: search
+      },
+      {
+        product: search
+      },
+      {
+        state: search
+      },
+      {
+        localGovtArea: search
+      },
+      {
+        title: search
+      }
+    ];
+  }
+
+  if (!page) {
+    page = 1;
+  }
+  try {
+    let [count, products] = await Promise.all([
+      Product.find(searchQuery).count(),
+      Product.find(searchQuery)
+        .sort("created")
+    ]);
+    let username = await Users.find(
+      {
+        sid: {
+          $in: products.map(product => product.username)
+        }
+      },
+      "username phoneNumber sid"
+    );
+    products = products.map(product => {
+      let userName = username.filter(user => user.sid === product.username)[0];
+      product._doc.username = userName ? userName.username : "";
+      product._doc.phoneNumber = userName ? userName.phoneNumber : "";
+      return product;
+    });
+
+    return res.json({
+      count,
+      products
+    });
+  } catch (err) {
+    console.log(err);
     res.status(500).json({
-      message: "Unable to delete Product",
+      message: "Error Loading Product List",
       error: err.message
     });
-  });
+  }
+};
+
+export const GetSummary = async ( req, res) => {
+  let oneday = 8.64e7
+  let search = {
+    $lt: (new Date(Date.now() - 7 * oneday)).toString()
+  }
+  try {
+    let [ availableProducts, lastWeekCount, usersCount, myAdsCount ] = await Promise.all([
+      Product.find().count(),
+      Product.find({created: search}).count(),
+      Users.find().count(),
+      Product.find({ username: req.user.sid }).count()
+    ])
+    return res.json({
+      availableProducts, lastWeekCount, usersCount, myAdsCount
+    })
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      message: "Error Getting Summary Data",
+      error: err.message
+    });
+  }
 }

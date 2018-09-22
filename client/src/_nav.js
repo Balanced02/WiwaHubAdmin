@@ -3,7 +3,7 @@ export default {
     {
       name: 'Dashboard',
       url: '/dashboard',
-      icon: 'icon-speedometer',
+      icon: 'fa fa-home',
       badge: {
         variant: 'info',
         text: 'NEW',
@@ -21,7 +21,7 @@ export default {
     {
       name: 'Product List',
       url: '/productList',
-      icon: 'icon-speedometer',
+      icon: 'fa fa-plus-square',
       badge: {
         variant: 'info',
         text: 'NEW',
@@ -30,7 +30,12 @@ export default {
     {
       name: 'Add Product',
       url: '/addProduct',
-      icon: 'icon-speedometer',
+      icon: 'fa fa-list-ul',
+    },
+    {
+      name: 'My Ads',
+      url: '/myAds',
+      icon: 'fa fa-user',
     },
   ],
 };

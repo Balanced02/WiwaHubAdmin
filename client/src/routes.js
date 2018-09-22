@@ -23,12 +23,18 @@ const NewProduct = Loadable({
   loading: Loading
 })
 
+const MyAds = Loadable({
+  loader: () => import('./views/Base/MyAds'),
+  loading: Loading
+})
+
 
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/productList', name: 'Product List', component: ProductList },
   { path: '/addProduct', name: 'New Product', component: NewProduct },
+  { path: '/myAds', name: 'New Product', component: MyAds },
 ];
 
 export default routes;

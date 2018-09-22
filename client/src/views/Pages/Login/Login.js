@@ -69,7 +69,7 @@ class Login extends Component {
                         <Button color="primary" className="px-4" onClick={() => this.submit()} >Login</Button>
                       </Col>
                       <Col xs="6" className="text-right">
-                        <Button color="link" className="px-0">Forgot password?</Button>
+                      <Link to='/register' > <Button color="link" className="px-0">Create new Account</Button> </Link>
                       </Col>
                     </Row>
                   </CardBody>
