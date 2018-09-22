@@ -258,7 +258,7 @@ var deleteImage = function deleteImage(public_id) {
   });
 };
 
-api.post('/api/deleteProduct/:id', function (req, res) {
+api.post('/deleteProduct/:id', function (req, res) {
   var public_id = req.body.picName;
   deleteImage(public_id).then(function (result) {
     return (0, _api.DeleteProduct)(req, res, result);
@@ -268,7 +268,9 @@ api.post('/api/deleteProduct/:id', function (req, res) {
 });
 
 api.post('/getProducts/:id', _api.GetProducts);
+api.post('/getMyAds/:id', _api.MyAds);
 api.post('/changePremium', _api.ChangePremium);
+api.get("/getSummary", _api.GetSummary);
 api.post("/createProduct", function (req, res) {
   var user = req.user;
   console.log(user);
@@ -289,7 +291,7 @@ _nodeCron2.default.schedule("* * 1 * *", _asyncToGenerator( /*#__PURE__*/_regene
         case 0:
           oneday = 8.64e7;
           search = {
-            $lt: new Date(Date.now() - 7 * oneday).toString()
+            $lt: new Date(Date.now() - 14 * oneday).toString()
           };
 
           console.log("cleanup in progress");

@@ -173,7 +173,7 @@ const deleteImage = public_id => {
   })
 }
 
-api.post('/api/deleteProduct/:id', (req, res) => {
+api.post('/deleteProduct/:id', (req, res) => {
   let public_id = req.body.picName
   deleteImage(public_id)
     .then(result => DeleteProduct(req, res, result))
@@ -197,7 +197,7 @@ api.post("/createProduct", (req, res) => {
 cron.schedule("* * 1 * *", async () => {
   let oneday = 8.64e7
   let search = {
-    $lt: (new Date(Date.now() - 30 * oneday)).toString()
+    $lt: (new Date(Date.now() - 14 * oneday)).toString()
   }
   console.log("cleanup in progress")
   try {

@@ -8,6 +8,7 @@ import {
   NavItem,
   NavLink
 } from "reactstrap";
+import { Link } from 'react-router-dom'
 import PropTypes from "prop-types";
 
 import {
@@ -57,52 +58,28 @@ class DefaultHeader extends Component {
               />
             </DropdownToggle>
             <DropdownMenu right style={{ right: "auto" }}>
-              <DropdownItem header tag="div" className="text-center">
-                <strong>Account</strong>
-              </DropdownItem>
               <DropdownItem>
-                <i className="fa fa-bell-o" /> Updates<Badge color="info">
+                <Link to='/productList' >
+                <i className="fa fa-bell-o" /> Product List <Badge color="info">
                   42
                 </Badge>
+                </Link>
               </DropdownItem>
               <DropdownItem>
-                <i className="fa fa-envelope-o" /> Messages<Badge color="success">
+                <Link to='/addProduct' >
+                <i className="fa fa-envelope-o" /> Add Product <Badge color="success">
                   42
                 </Badge>
+                </Link>
               </DropdownItem>
               <DropdownItem>
-                <i className="fa fa-tasks" /> Tasks<Badge color="danger">
+                <Link to='/myAds' >
+                <i className="fa fa-tasks" /> My Ads <Badge color="danger">
                   42
                 </Badge>
-              </DropdownItem>
-              <DropdownItem>
-                <i className="fa fa-comments" /> Comments<Badge color="warning">
-                  42
-                </Badge>
-              </DropdownItem>
-              <DropdownItem header tag="div" className="text-center">
-                <strong>Settings</strong>
-              </DropdownItem>
-              <DropdownItem>
-                <i className="fa fa-user" /> Profile
-              </DropdownItem>
-              <DropdownItem>
-                <i className="fa fa-wrench" /> Settings
-              </DropdownItem>
-              <DropdownItem>
-                <i className="fa fa-usd" /> Payments<Badge color="secondary">
-                  42
-                </Badge>
-              </DropdownItem>
-              <DropdownItem>
-                <i className="fa fa-file" /> Projects<Badge color="primary">
-                  42
-                </Badge>
+                </Link>
               </DropdownItem>
               <DropdownItem divider />
-              <DropdownItem>
-                <i className="fa fa-shield" /> Lock Account
-              </DropdownItem>
               <DropdownItem onClick={() => this.props.dispatch(logout())}>
                 <i className="fa fa-lock" /> Logout
               </DropdownItem>

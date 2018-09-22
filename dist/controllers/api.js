@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DeleteProduct = exports.GetProducts = exports.CreateProduct = exports.ChangePremium = undefined;
+exports.GetSummary = exports.MyAds = exports.DeleteProduct = exports.GetProducts = exports.CreateProduct = exports.ChangePremium = undefined;
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -59,7 +59,11 @@ var CreateProduct = exports.CreateProduct = function CreateProduct(req, res, res
       negotiable = _JSON$parse.negotiable;
 
   var productDetails = {
-    title: title, state: state, localGovtArea: localGovtArea, price: price, negotiable: negotiable,
+    title: title,
+    state: state,
+    localGovtArea: localGovtArea,
+    price: price,
+    negotiable: negotiable,
     product: url,
     picName: public_id
   };
@@ -85,8 +89,8 @@ var GetProducts = exports.GetProducts = function () {
 
             if (searchKey) {
               search = {
-                $regex: searchKey || '',
-                $options: 'i'
+                $regex: searchKey || "",
+                $options: "i"
               };
 
               searchQuery = {
@@ -169,7 +173,7 @@ var DeleteProduct = exports.DeleteProduct = function DeleteProduct(req, res, res
   var _id = req.params.id;
   _Products2.default.findOneAndRemove({ _id: _id }).then(function (data) {
     return res.json({
-      message: 'Deleted Successfully'
+      message: "Deleted Successfully"
     });
   }).catch(function (err) {
     res.status(500).json({
@@ -178,4 +182,147 @@ var DeleteProduct = exports.DeleteProduct = function DeleteProduct(req, res, res
     });
   });
 };
+
+var MyAds = exports.MyAds = function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime2.default.mark(function _callee2(req, res) {
+    var page, searchKey, sid, searchQuery, search, _ref5, _ref6, count, products, username;
+
+    return _regeneratorRuntime2.default.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            page = parseInt(Number(req.params.id));
+            searchKey = req.body.searchKey;
+            sid = req.user.sid;
+            searchQuery = { username: sid };
+
+            if (searchKey) {
+              search = {
+                $regex: searchKey || "",
+                $options: "i"
+              };
+
+              searchQuery.$or = [{
+                sid: search
+              }, {
+                product: search
+              }, {
+                state: search
+              }, {
+                localGovtArea: search
+              }, {
+                title: search
+              }];
+            }
+
+            if (!page) {
+              page = 1;
+            }
+            _context2.prev = 6;
+            _context2.next = 9;
+            return Promise.all([_Products2.default.find(searchQuery).count(), _Products2.default.find(searchQuery).sort("created")]);
+
+          case 9:
+            _ref5 = _context2.sent;
+            _ref6 = _slicedToArray(_ref5, 2);
+            count = _ref6[0];
+            products = _ref6[1];
+            _context2.next = 15;
+            return _Users2.default.find({
+              sid: {
+                $in: products.map(function (product) {
+                  return product.username;
+                })
+              }
+            }, "username phoneNumber sid");
+
+          case 15:
+            username = _context2.sent;
+
+            products = products.map(function (product) {
+              var userName = username.filter(function (user) {
+                return user.sid === product.username;
+              })[0];
+              product._doc.username = userName ? userName.username : "";
+              product._doc.phoneNumber = userName ? userName.phoneNumber : "";
+              return product;
+            });
+
+            return _context2.abrupt("return", res.json({
+              count: count,
+              products: products
+            }));
+
+          case 20:
+            _context2.prev = 20;
+            _context2.t0 = _context2["catch"](6);
+
+            console.log(_context2.t0);
+            res.status(500).json({
+              message: "Error Loading Product List",
+              error: _context2.t0.message
+            });
+
+          case 24:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, undefined, [[6, 20]]);
+  }));
+
+  return function MyAds(_x3, _x4) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+
+var GetSummary = exports.GetSummary = function () {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime2.default.mark(function _callee3(req, res) {
+    var oneday, search, _ref8, _ref9, availableProducts, lastWeekCount, usersCount, myAdsCount;
+
+    return _regeneratorRuntime2.default.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            oneday = 8.64e7;
+            search = {
+              $lt: new Date(Date.now() - 7 * oneday).toString()
+            };
+            _context3.prev = 2;
+            _context3.next = 5;
+            return Promise.all([_Products2.default.find().count(), _Products2.default.find({ created: search }).count(), _Users2.default.find().count(), _Products2.default.find({ username: req.user.sid }).count()]);
+
+          case 5:
+            _ref8 = _context3.sent;
+            _ref9 = _slicedToArray(_ref8, 4);
+            availableProducts = _ref9[0];
+            lastWeekCount = _ref9[1];
+            usersCount = _ref9[2];
+            myAdsCount = _ref9[3];
+            return _context3.abrupt("return", res.json({
+              availableProducts: availableProducts, lastWeekCount: lastWeekCount, usersCount: usersCount, myAdsCount: myAdsCount
+            }));
+
+          case 14:
+            _context3.prev = 14;
+            _context3.t0 = _context3["catch"](2);
+
+            console.log(_context3.t0);
+            res.status(500).json({
+              message: "Error Getting Summary Data",
+              error: _context3.t0.message
+            });
+
+          case 18:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, undefined, [[2, 14]]);
+  }));
+
+  return function GetSummary(_x5, _x6) {
+    return _ref7.apply(this, arguments);
+  };
+}();
 //# sourceMappingURL=api.js.map
