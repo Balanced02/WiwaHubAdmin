@@ -15,7 +15,7 @@ export default ({
   return (
     <div>
       <Card>
-        <CardHeader>Personal details</CardHeader>
+        <CardHeader>Product details</CardHeader>
         <CardBody>
           {uploading ? (
             <div style={{ marginBottom: 10 }}>
