@@ -25,7 +25,6 @@ class NewProduct extends Component {
         localGovtArea: ""
       },
       fetching: false,
-      blocking: true,
       user: this.props.user
         ? this.props.user.userType
           ? this.props.user
