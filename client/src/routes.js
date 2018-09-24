@@ -30,11 +30,11 @@ const MyAds = Loadable({
 
 
 const routes = [
-  { path: '/', exact: true, name: 'Home', component: DefaultLayout },
-  { path: '/dashboard', name: 'Dashboard', component: Dashboard },
-  { path: '/productList', name: 'Product List', component: ProductList },
-  { path: '/addProduct', name: 'New Product', component: NewProduct },
-  { path: '/myAds', name: 'New Product', component: MyAds },
+  { path: '/app', exact: true, name: 'Home', component: DefaultLayout },
+  { path: '/app/dashboard', name: 'Dashboard', component: Dashboard },
+  { path: '/app/productList', name: 'Product List', component: ProductList },
+  { path: '/app/addProduct', name: 'New Product', component: NewProduct },
+  { path: '/app/myAds', name: 'New Product', component: MyAds },
 ];
 
 export default routes;

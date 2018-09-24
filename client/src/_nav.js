@@ -2,7 +2,7 @@ export default {
   items: [
     {
       name: 'Dashboard',
-      url: '/dashboard',
+      url: '/app/dashboard',
       icon: 'fa fa-home',
       badge: {
         variant: 'info',
@@ -11,7 +11,7 @@ export default {
     },
     {
       name: 'Product List',
-      url: '/productList',
+      url: '/app/productList',
       icon: 'fa fa-plus-square',
       badge: {
         variant: 'info',
@@ -20,12 +20,12 @@ export default {
     },
     {
       name: 'Add Product',
-      url: '/addProduct',
+      url: '/app/addProduct',
       icon: 'fa fa-list-ul',
     },
     {
       name: 'My Ads',
-      url: '/myAds',
+      url: '/app/myAds',
       icon: 'fa fa-user',
     },
   ],

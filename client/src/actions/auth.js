@@ -51,7 +51,7 @@ export const startLogin = formData => {
       .then(data => {
         dispatch(stopLoading());
         dispatch(login(data.user));
-        history.push("/dashboard");
+        history.push("/app");
       })
       .catch(err => {
         console.log(err);

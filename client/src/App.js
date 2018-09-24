@@ -22,6 +22,8 @@ import { DefaultLayout } from "./containers";
 // Pages
 import { Login, Page404, Page500, Register, AboutUs } from "./views/Pages";
 
+import Home from './views/HomePage'
+
 import configureStore from "./store";
 const store = configureStore(() => {});
 
@@ -45,7 +47,8 @@ class App extends Component {
               <Route exact path="/aboutUs" name="About Us" component={AboutUs} />
               <Route exact path="/404" name="Page 404" component={Page404} />
               <Route exact path="/500" name="Page 500" component={Page500} />
-              <Route path="/" name="Home" component={DefaultLayout} />
+              <Route path="/app" name="Home" component={DefaultLayout} />
+              <Route path="/" name="WiwaHub" component={Home} />
             </Switch>
           </HashRouter>
           <Alert />
