@@ -45,10 +45,10 @@ class App extends Component {
                 component={Register}
               />
               <Route exact path="/aboutUs" name="About Us" component={AboutUs} />
-              <Route exact path="/404" name="Page 404" component={Page404} />
-              <Route exact path="/500" name="Page 500" component={Page500} />
+              {/* <Route exact path="/500" name="Page 500" component={Page500} /> */}
               <Route path="/app" name="Home" component={DefaultLayout} />
-              <Route path="/" name="WiwaHub" component={Home} />
+              <Route exact path="/" name="WiwaHub" component={Home} />
+              <Route exact path="*" name="Page 404" component={Page404} />
             </Switch>
           </HashRouter>
           <Alert />

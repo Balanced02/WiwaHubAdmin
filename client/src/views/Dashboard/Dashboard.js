@@ -603,7 +603,7 @@ class Dashboard extends Component {
         </Row>
         <Row>
           <Col xs="6" sm="6" lg="3">
-          <Link to='/productList' >
+          <Link to='/app/productList' >
             <div className="brand-card">
               <div className="brand-card-header bg-facebook">
                 <i className="fa fa-list" />
@@ -625,7 +625,7 @@ class Dashboard extends Component {
           </Col>
 
           <Col xs="6" sm="6" lg="3">
-          <Link to='/addProduct' >
+          <Link to='/app/addProduct' >
             <div className="brand-card">
               <div className="brand-card-header bg-twitter">
                 <i className="fa fa-plus" />

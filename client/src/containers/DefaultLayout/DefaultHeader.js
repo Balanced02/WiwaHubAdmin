@@ -30,6 +30,12 @@ const propTypes = {
 const defaultProps = {};
 
 class DefaultHeader extends Component {
+
+  logout() {
+    this.props.dispatch(logout())
+    window.location.reload()
+  }
+  
   render() {
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
@@ -80,7 +86,7 @@ class DefaultHeader extends Component {
                 </Link>
               </DropdownItem>
               <DropdownItem divider />
-              <DropdownItem onClick={() => this.props.dispatch(logout())}>
+              <DropdownItem onClick={() => this.logout()}>
                 <i className="fa fa-lock" /> Logout
               </DropdownItem>
             </DropdownMenu>
