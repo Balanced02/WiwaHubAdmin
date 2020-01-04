@@ -2,7 +2,6 @@ import express from "express";
 import logger from "morgan";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import routes from "./routes";
 import cors from "cors";
 
@@ -23,21 +22,17 @@ mongoose.connect(
   }
 );
 
-dotenv.config({
-  configPath:
-    process.env.NODE_ENV === "production" ? "../config/prod" : "../config/dev"
-});
-
 app.use(
   logger("dev", {
     skip: () => app.get("env") === "test"
   })
 );
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: "http://wiwahub.herokuapp.com",
+    origin: "*",
     // origin: "http://localhost:3000",
     credentials: true
   })

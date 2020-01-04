@@ -1,5 +1,5 @@
 {
-  "name": "esmartest",
+  "name": "wiwahub",
   "script": "./server/index.js",
   "instances": 1,
   "merge_logs": true,
